@@ -5,7 +5,14 @@ namespace EmpresaBundle\Controller;
 use EmpresaBundle\Entity\Usuario;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
+
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+
 
 /**
  * Usuario controller.
@@ -23,14 +30,61 @@ class UsuarioController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-
         $usuarios = $em->getRepository('EmpresaBundle:Usuario')->findAll();
+        $response = new Response();
+        $encoders = array(new JsonEncoder());
 
-        return $this->render('usuario/index.html.twig', array(
-            'usuarios' => $usuarios,
-        ));
+        $normalizers = array((new ObjectNormalizer())->setIgnoredAttributes(
+            [
+                "__initializer__", 
+                "__cloner__",
+                "__isInitialized__"
+            ]));
+
+        $serializer = new Serializer($normalizers, $encoders);
+        $response->setContent(json_encode(array(
+        'usuarios' => $serializer->serialize($usuarios, 'json'),
+        )));
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
     }
 
+    /**
+     * Validate user.
+     *
+     * @Route("/authenticate", name="usuario_authenticate")
+     * @Method({"GET", "POST"})
+     */
+    public function authenticateAction(Request $request)
+    {
+
+        $data = json_decode($request->getContent(), true);
+        $request->request->replace($data);
+        //creamos un usuario
+        $username = $request->request->get('usuario');
+        $userpassword = $request->request->get('password');
+
+        $criteria = array('usuario' => $username, 'password' => $userpassword);
+        $em = $this->getDoctrine()->getManager();
+        $user = $em->getRepository("EmpresaBundle:Usuario")->findBy($criteria);
+		
+        if($user != null){
+            $resultUsuario = $user[0];
+        }else{
+            //retorno un usuario sin datos
+            $resultUsuario = new Usuario();
+        }
+        //genero la respuesta hacia el cliente
+        $response = new Response();
+        $encoders = array(new JsonEncoder());
+        $normalizers = array(new ObjectNormalizer());
+        $serializer = new Serializer($normalizers, $encoders);
+        $response->setContent(json_encode(array(
+        'usuario' => $serializer->serialize($resultUsuario, 'json'),
+        )));
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
+    }
     /**
      * Creates a new usuario entity.
      *
@@ -39,22 +93,26 @@ class UsuarioController extends Controller
      */
     public function newAction(Request $request)
     {
+        $data = json_decode($request->getContent(), true);
+        $request->request->replace($data);
+        
         $usuario = new Usuario();
-        $form = $this->createForm('EmpresaBundle\Form\UsuarioType', $usuario);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($usuario);
-            $em->flush();
-
-            return $this->redirectToRoute('usuario_show', array('id' => $usuario->getId()));
-        }
-
-        return $this->render('usuario/new.html.twig', array(
-            'usuario' => $usuario,
-            'form' => $form->createView(),
-        ));
+        $usuario->setApellido($request->request->get('apellido'));
+        $usuario->setNombre($request->request->get('nombre'));
+        $usuario->setDni($request->request->get('dni'));
+        $usuario->setEmail($request->request->get('email'));
+        $usuario->setTelefono($request->request->get('telefono'));
+        $usuario->setUsuario($request->request->get('usuario'));
+        $usuario->setPassword($request->request->get('password'));
+        $usuario->setPerfil($request->request->get('perfil'));
+        
+        $em = $this->getDoctrine()->getManager();
+        
+        $em->persist($usuario);
+        $em->flush();
+        
+        $result['status'] = 'ok';
+        return new Response(json_encode($result), 200);
     }
 
     /**
@@ -79,23 +137,30 @@ class UsuarioController extends Controller
      * @Route("/{id}/edit", name="usuario_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, Usuario $usuario)
+    public function editAction($id, Request $request)
     {
-        $deleteForm = $this->createDeleteForm($usuario);
-        $editForm = $this->createForm('EmpresaBundle\Form\UsuarioType', $usuario);
-        $editForm->handleRequest($request);
+        $data = json_decode($request->getContent(), true);
+        $request->request->replace($data);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+        $em = $this->getDoctrine()->getManager();
+        $usuario = $em->getRepository('EmpresaBundle:Usuario')->find($id);
 
-            return $this->redirectToRoute('usuario_edit', array('id' => $usuario->getId()));
-        }
-
-        return $this->render('usuario/edit.html.twig', array(
-            'usuario' => $usuario,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        $usuario->setApellido($request->request->get('apellido'));
+        $usuario->setNombre($request->request->get('nombre'));
+        $usuario->setDni($request->request->get('dni'));
+        $usuario->setEmail($request->request->get('email'));
+        $usuario->setTelefono($request->request->get('telefono'));
+        $usuario->setUsuario($request->request->get('usuario'));
+        $usuario->setPassword($request->request->get('password'));
+        $usuario->setPerfil($request->request->get('perfil'));
+        
+        $em = $this->getDoctrine()->getManager();
+        
+        $em->persist($usuario);
+        $em->flush();
+        
+        $result['status'] = 'ok';
+        return new Response(json_encode($result), 200);
     }
 
     /**
@@ -104,18 +169,19 @@ class UsuarioController extends Controller
      * @Route("/{id}", name="usuario_delete")
      * @Method("DELETE")
      */
-    public function deleteAction(Request $request, Usuario $usuario)
+    public function deleteAction($id)
     {
-        $form = $this->createDeleteForm($usuario);
-        $form->handleRequest($request);
+        $em = $this->getDoctrine()->getManager();
+        $usuario = $em->getRepository('EmpresaBundle:Usuario')->find($id);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($usuario);
-            $em->flush();
+        if (!$usuario){
+            throw $this->createNotFoundException('id incorrecta');
         }
 
-        return $this->redirectToRoute('usuario_index');
+        $em->remove($usuario);
+        $em->flush();
+        $result['status'] = 'ok';
+        return new Response(json_encode($result), 200);
     }
 
     /**
