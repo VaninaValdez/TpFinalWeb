@@ -7,12 +7,20 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
+import { AdministrativosComponent } from './components/administrativos/administrativos.component';
+import { AdministradorComponent } from './components/administrador/administrador.component';
+import { ClienteComponent } from './components/cliente/cliente.component';
+import { AutentificacionComponent } from './components/autentificacion/autentificacion.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
-    FooterComponent
+    FooterComponent,
+    AdministrativosComponent,
+    AdministradorComponent,
+    ClienteComponent,
+    AutentificacionComponent
   ],
   imports: [
     BrowserModule,
