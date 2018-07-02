@@ -5,7 +5,13 @@ namespace EmpresaBundle\Controller;
 use EmpresaBundle\Entity\Vehiculo;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
+
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
 /**
  * Vehiculo controller.
@@ -23,12 +29,23 @@ class VehiculoController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-
         $vehiculos = $em->getRepository('EmpresaBundle:Vehiculo')->findAll();
+        $response = new Response();
+        $encoders = array(new JsonEncoder());
 
-        return $this->render('vehiculo/index.html.twig', array(
-            'vehiculos' => $vehiculos,
-        ));
+        $normalizers = array((new ObjectNormalizer())->setIgnoredAttributes(
+            [
+                "__initializer__", 
+                "__cloner__",
+                "__isInitialized__"
+            ]));
+
+        $serializer = new Serializer($normalizers, $encoders);
+        $response->setContent(json_encode(array(
+        'vehiculos' => $serializer->serialize($vehiculos, 'json'),
+        )));
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
     }
 
     /**
@@ -39,22 +56,24 @@ class VehiculoController extends Controller
      */
     public function newAction(Request $request)
     {
+        $data = json_decode($request->getContent(), true);
+        $request->request->replace($data);
+        
         $vehiculo = new Vehiculo();
-        $form = $this->createForm('EmpresaBundle\Form\VehiculoType', $vehiculo);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($vehiculo);
-            $em->flush();
-
-            return $this->redirectToRoute('vehiculo_show', array('id' => $vehiculo->getId()));
-        }
-
-        return $this->render('vehiculo/new.html.twig', array(
-            'vehiculo' => $vehiculo,
-            'form' => $form->createView(),
-        ));
+        $vehiculo->setId($request->request->get('id'));
+        $vehiculo->setPatente($request->request->get('patente'));
+        $vehiculo->setMarca($request->request->get('marca'));
+        $vehiculo->setModelo($request->request->get('modelo'));
+        $vehiculo->setPathimagen($request->request->get('pathimagen'));
+        $vehiculo->setDisponible($request->request->get('disponible'));
+        
+        $em = $this->getDoctrine()->getManager();
+        
+        $em->persist($reserva);
+        $em->flush();
+        
+        $result['status'] = 'ok';
+        return new Response(json_encode($result), 200);
     }
 
     /**
@@ -79,23 +98,28 @@ class VehiculoController extends Controller
      * @Route("/{id}/edit", name="vehiculo_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, Vehiculo $vehiculo)
+    public function editAction($id, Request $request)
     {
-        $deleteForm = $this->createDeleteForm($vehiculo);
-        $editForm = $this->createForm('EmpresaBundle\Form\VehiculoType', $vehiculo);
-        $editForm->handleRequest($request);
+        $data = json_decode($request->getContent(), true);
+        $request->request->replace($data);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+        $em = $this->getDoctrine()->getManager();
+        $vehiculo = $em->getRepository('EmpresaBundle:Vehiculo')->find($id);
 
-            return $this->redirectToRoute('vehiculo_edit', array('id' => $vehiculo->getId()));
-        }
-
-        return $this->render('vehiculo/edit.html.twig', array(
-            'vehiculo' => $vehiculo,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        $vehiculo->setId($request->request->get('id'));
+        $vehiculo->setPatente($request->request->get('patente'));
+        $vehiculo->setMarca($request->request->get('marca'));
+        $vehiculo->setModelo($request->request->get('modelo'));
+        $vehiculo->setPathimagen($request->request->get('pathimagen'));
+        $vehiculo->setDisponible($request->request->get('disponible'));
+        
+        $em = $this->getDoctrine()->getManager();
+        
+        $em->persist($vehiculo);
+        $em->flush();
+        
+        $result['status'] = 'ok';
+        return new Response(json_encode($result), 200);
     }
 
     /**
@@ -104,18 +128,19 @@ class VehiculoController extends Controller
      * @Route("/{id}", name="vehiculo_delete")
      * @Method("DELETE")
      */
-    public function deleteAction(Request $request, Vehiculo $vehiculo)
+    public function deleteAction($id)
     {
-        $form = $this->createDeleteForm($vehiculo);
-        $form->handleRequest($request);
+        $em = $this->getDoctrine()->getManager();
+        $vehiculo = $em->getRepository('EmpresaBundle:Vehiculo')->find($id);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($vehiculo);
-            $em->flush();
+        if (!$vehiculo){
+            throw $this->createNotFoundException('id incorrecta');
         }
 
-        return $this->redirectToRoute('vehiculo_index');
+        $em->remove($vehiculo);
+        $em->flush();
+        $result['status'] = 'ok';
+        return new Response(json_encode($result), 200);
     }
 
     /**

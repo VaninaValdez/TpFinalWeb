@@ -5,7 +5,13 @@ namespace EmpresaBundle\Controller;
 use EmpresaBundle\Entity\Novedad;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
+
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
 /**
  * Novedad controller.
@@ -23,12 +29,23 @@ class NovedadController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
+        $novedades = $em->getRepository('EmpresaBundle:Novedad')->findAll();
+        $response = new Response();
+        $encoders = array(new JsonEncoder());
 
-        $novedads = $em->getRepository('EmpresaBundle:Novedad')->findAll();
+        $normalizers = array((new ObjectNormalizer())->setIgnoredAttributes(
+            [
+                "__initializer__", 
+                "__cloner__",
+                "__isInitialized__"
+            ]));
 
-        return $this->render('novedad/index.html.twig', array(
-            'novedads' => $novedads,
-        ));
+        $serializer = new Serializer($normalizers, $encoders);
+        $response->setContent(json_encode(array(
+        'novedades' => $serializer->serialize($novedades, 'json'),
+        )));
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
     }
 
     /**
@@ -39,22 +56,22 @@ class NovedadController extends Controller
      */
     public function newAction(Request $request)
     {
+        $data = json_decode($request->getContent(), true);
+        $request->request->replace($data);
+        
         $novedad = new Novedad();
-        $form = $this->createForm('EmpresaBundle\Form\NovedadType', $novedad);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($novedad);
-            $em->flush();
-
-            return $this->redirectToRoute('novedad_show', array('id' => $novedad->getId()));
-        }
-
-        return $this->render('novedad/new.html.twig', array(
-            'novedad' => $novedad,
-            'form' => $form->createView(),
-        ));
+        $novedad->setId($request->request->get('id'));
+        $novedad->setUsuario($request->request->get('usuario'));
+        $novedad->setTexto($request->request->get('texto'));
+        $novedad->setEstado($request->request->get('estado'));
+        
+        $em = $this->getDoctrine()->getManager();
+        
+        $em->persist($reserva);
+        $em->flush();
+        
+        $result['status'] = 'ok';
+        return new Response(json_encode($result), 200);
     }
 
     /**
@@ -79,23 +96,26 @@ class NovedadController extends Controller
      * @Route("/{id}/edit", name="novedad_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, Novedad $novedad)
+    public function editAction($id, Request $request)
     {
-        $deleteForm = $this->createDeleteForm($novedad);
-        $editForm = $this->createForm('EmpresaBundle\Form\NovedadType', $novedad);
-        $editForm->handleRequest($request);
+        $data = json_decode($request->getContent(), true);
+        $request->request->replace($data);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+        $em = $this->getDoctrine()->getManager();
+        $novedad = $em->getRepository('EmpresaBundle:Novedad')->find($id);
 
-            return $this->redirectToRoute('novedad_edit', array('id' => $novedad->getId()));
-        }
-
-        return $this->render('novedad/edit.html.twig', array(
-            'novedad' => $novedad,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        $novedad->setId($request->request->get('id'));
+        $novedad->setUsuario($request->request->get('usuario'));
+        $novedad->setTexto($request->request->get('texto'));
+        $novedad->setEstado($request->request->get('estado'));
+        
+        $em = $this->getDoctrine()->getManager();
+        
+        $em->persist($novedad);
+        $em->flush();
+        
+        $result['status'] = 'ok';
+        return new Response(json_encode($result), 200);
     }
 
     /**
@@ -104,18 +124,19 @@ class NovedadController extends Controller
      * @Route("/{id}", name="novedad_delete")
      * @Method("DELETE")
      */
-    public function deleteAction(Request $request, Novedad $novedad)
+    public function deleteAction($id)
     {
-        $form = $this->createDeleteForm($novedad);
-        $form->handleRequest($request);
+        $em = $this->getDoctrine()->getManager();
+        $novedad = $em->getRepository('EmpresaBundle:Novedad')->find($id);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($novedad);
-            $em->flush();
+        if (!$novedad){
+            throw $this->createNotFoundException('id incorrecta');
         }
 
-        return $this->redirectToRoute('novedad_index');
+        $em->remove($novedad);
+        $em->flush();
+        $result['status'] = 'ok';
+        return new Response(json_encode($result), 200);
     }
 
     /**

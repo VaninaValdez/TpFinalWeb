@@ -5,6 +5,9 @@ import { AdministrativosComponent } from './components/administrativos/administr
 import { HomeComponent } from './components/home/home.component';
 import { AdministradorComponent } from './components/administrador/administrador.component';
 import { ClienteComponent } from './components/cliente/cliente.component';
+import { NovedadComponent } from './components/novedad/novedad.component';
+import { VehiculoComponent } from './components/vehiculo/vehiculo.component';
+import { ReservaComponent } from './components/reserva/reserva.component';
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -12,6 +15,7 @@ const routes: Routes = [
   {path: 'vehiculos', component: AdministrativosComponent},
   {path: 'usuarios', component: AdministradorComponent},
   {path: 'reservas', component: ClienteComponent},
+  {path: 'novedad', component: NovedadComponent},
   {path: '**', pathMatch: 'full', redirectTo: 'login'}
 ];
  @NgModule({
