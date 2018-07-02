@@ -1,3 +1,134 @@
-<p>
-  cliente works!
-</p>
+<div class="container">
+  <div class="row" class="col-md- col-md-offset-3">
+    <div class="container">
+      <h2 class="titulo">Reserva de Vehiculos</h2>
+      <p>Los mejores autos del país!!</p>
+      <div id="accordion">
+        <div class="card">
+          <div class="card-header">
+            <a class="card-link" data-toggle="collapse" href="#collapseOne">
+              Novedad
+            </a>
+          </div>
+          <div id="collapseOne" class="collapse show" data-parent="#accordion">
+            <div class="card-body">
+              <div class="media">
+        <img src="img_avatar1.png" class="align-self-start mr-3" style="width:60px">
+        <div class="media-body">
+          <h4>Soy una novedad</h4>
+          <p>Aca se mostrarian las novedades que escriben los usuarios, que se yo :'v</p>
+          <p>Seguro que si lo muestro por aca va a ser un quilombo</p>
+          <p>Encima cuando se borre, se van a borrar aca tambien??</p>
+        </div>
+      </div>
+
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <a class="collapsed card-link" data-toggle="collapse" href="#collapseTwo">
+            Collapsible Group Item #2
+          </a>
+          </div>
+          <div id="collapseTwo" class="collapse" data-parent="#accordion">
+            <div class="card-body">
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <a class="collapsed card-link" data-toggle="collapse" href="#collapseThree">
+              Collapsible Group Item #3
+            </a>
+          </div>
+          <div id="collapseThree" class="collapse" data-parent="#accordion">
+            <div class="card-body">
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Datatable hay que revisarla!!-->
+  <h3 class="titulo">Reservas</h3>
+  <table class="table table-striped" [mfData]="reservas" #mf="mfDataTable" [mfRowsOnPage]="4">
+    <thead>
+      <tr>
+        <th style="width: 10%">
+          <mfDefaultSorter by="id">Id</mfDefaultSorter>
+        </th>
+        <th style="width: 10%">
+          <mfDefaultSorter by="usuario">Usuario</mfDefaultSorter>
+        </th>
+        <th style="width: 10%">
+          <mfDefaultSorter by="vehiculo">Vehiculo</mfDefaultSorter>
+        </th>
+        <th style="width: 10%">
+          <mfDefaultSorter by="dias">Dias</mfDefaultSorter>
+        </th>
+        <th style="width: 10%">
+          <mfDefaultSorter by="costoRenta">Costo</mfDefaultSorter>
+        </th>
+        <th style="width: 10%">
+          <mfDefaultSorter by="fechaRenta">Fecha de Renta</mfDefaultSorter>
+        </th>
+        <th style="width: 10%">
+          <mfDefaultSorter by="estado">Estado</mfDefaultSorter>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of mf.data">
+        <td>{{item.lu}}</td>
+        <td>{{item.notaConcepto}}</td>
+        <td>{{item.notaEscrito}}</td>
+        <td>{{item.notaOral}}</td>
+        <td>
+          <button class="btn-danger" (click)="borrarEvaluacion(item)">Borrar</button>
+          <button class="btn-dark" (click)="borrarEvaluacion(item)">Modificar</button>
+        </td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="4">
+          <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25]"></mfBootstrapPaginator>
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+</div>
+<!-- Aca comienza el modal -->
+<div class="modal fade" id="dialogo1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- cabecera del diálogo -->
+      <div class="modal-header">
+        <h4 class="modal-title">Modificar</h4>
+        <button type="button" class="close" data-dismiss="modal">X</button>
+      </div>
+
+      <!-- cuerpo del diálogo -->
+      <div class="modal-body">
+        <label>Legajo: {{eva.lu}}</label>
+        <br>
+        <label>Nota Final: {{notaFinal}}</label>
+        <br>
+        <label>Promedio: {{promedio}}</label>
+      </div>
+
+      <!-- pie del diálogo -->
+      <div class="modal-footer">
+        <button (click)="enviarEvaluacion()" type="button" class="btn btn-secondary" data-dismiss="modal">Guardar</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+      </div>
+
+    </div>
+  </div>
+</div>

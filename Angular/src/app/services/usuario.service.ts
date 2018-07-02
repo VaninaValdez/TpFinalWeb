@@ -10,12 +10,14 @@ import { Usuario } from '../models/usuario';
 
 export class UsuarioService {
 
-  userLoggedIn : boolean = false;
+  userLoggedIn: boolean = false;
   userLogged: Usuario;
-  constructor(private http:Http) { }
+  constructor(private http: Http) { }
 
   login(usuario: string, password: string) {
-      return this.http.post('http://localhost:8080/FinalWeb/finalProyect/web/app_dev.php/usuario/authenticate', JSON.stringify({ usuario: usuario, password: password }))
+    // nico :3
+      return this.http.post('http://localhost/FinalWeb/finalProyect/web/app_dev.php/usuario/authenticate',
+      JSON.stringify({ usuario: usuario, password: password }))
           .map(res => res.json());
   }
 
@@ -23,7 +25,7 @@ export class UsuarioService {
       // remove user from local storage to log user out
       localStorage.removeItem('currentUser');
       this.userLogged = new Usuario();
-      this.userLoggedIn = false;  
+      this.userLoggedIn = false;
   }
 
 
