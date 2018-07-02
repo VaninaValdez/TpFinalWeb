@@ -5,7 +5,13 @@ namespace EmpresaBundle\Controller;
 use EmpresaBundle\Entity\Reserva;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
+
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
 /**
  * Reserva controller.
@@ -23,12 +29,23 @@ class ReservaController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-
         $reservas = $em->getRepository('EmpresaBundle:Reserva')->findAll();
+        $response = new Response();
+        $encoders = array(new JsonEncoder());
 
-        return $this->render('reserva/index.html.twig', array(
-            'reservas' => $reservas,
-        ));
+        $normalizers = array((new ObjectNormalizer())->setIgnoredAttributes(
+            [
+                "__initializer__", 
+                "__cloner__",
+                "__isInitialized__"
+            ]));
+
+        $serializer = new Serializer($normalizers, $encoders);
+        $response->setContent(json_encode(array(
+        'reservas' => $serializer->serialize($reservas, 'json'),
+        )));
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
     }
 
     /**
@@ -39,22 +56,25 @@ class ReservaController extends Controller
      */
     public function newAction(Request $request)
     {
+        $data = json_decode($request->getContent(), true);
+        $request->request->replace($data);
+        
         $reserva = new Reserva();
-        $form = $this->createForm('EmpresaBundle\Form\ReservaType', $reserva);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($reserva);
-            $em->flush();
-
-            return $this->redirectToRoute('reserva_show', array('id' => $reserva->getId()));
-        }
-
-        return $this->render('reserva/new.html.twig', array(
-            'reserva' => $reserva,
-            'form' => $form->createView(),
-        ));
+        $reserva->setId($request->request->get('id'));
+        $reserva->setUsuario($request->request->get('usuario'));
+        $reserva->setVehiculo($request->request->get('vehiculo'));
+        $reserva->setDias($request->request->get('dias'));
+        $reserva->setCostoRenta($request->request->get('costoRenta'));
+        $reserva->setFechaRenta($request->request->get('fechaRenta'));
+        $reserva->setEstado($request->request->get('estado'));
+        
+        $em = $this->getDoctrine()->getManager();
+        
+        $em->persist($reserva);
+        $em->flush();
+        
+        $result['status'] = 'ok';
+        return new Response(json_encode($result), 200);
     }
 
     /**
@@ -79,23 +99,29 @@ class ReservaController extends Controller
      * @Route("/{id}/edit", name="reserva_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, Reserva $reserva)
+    public function editAction($id, Request $request)
     {
-        $deleteForm = $this->createDeleteForm($reserva);
-        $editForm = $this->createForm('EmpresaBundle\Form\ReservaType', $reserva);
-        $editForm->handleRequest($request);
+        $data = json_decode($request->getContent(), true);
+        $request->request->replace($data);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+        $em = $this->getDoctrine()->getManager();
+        $reserva = $em->getRepository('EmpresaBundle:Reserva')->find($id);
 
-            return $this->redirectToRoute('reserva_edit', array('id' => $reserva->getId()));
-        }
-
-        return $this->render('reserva/edit.html.twig', array(
-            'reserva' => $reserva,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        $reserva->setId($request->request->get('id'));
+        $reserva->setUsuario($request->request->get('usuario'));
+        $reserva->setVehiculo($request->request->get('vehiculo'));
+        $reserva->setDias($request->request->get('dias'));
+        $reserva->setCostoRenta($request->request->get('costoRenta'));
+        $reserva->setFechaRenta($request->request->get('fechaRenta'));
+        $reserva->setEstado($request->request->get('estado'));
+        
+        $em = $this->getDoctrine()->getManager();
+        
+        $em->persist($reserva);
+        $em->flush();
+        
+        $result['status'] = 'ok';
+        return new Response(json_encode($result), 200);
     }
 
     /**
@@ -104,18 +130,19 @@ class ReservaController extends Controller
      * @Route("/{id}", name="reserva_delete")
      * @Method("DELETE")
      */
-    public function deleteAction(Request $request, Reserva $reserva)
+    public function deleteAction($id)
     {
-        $form = $this->createDeleteForm($reserva);
-        $form->handleRequest($request);
+        $em = $this->getDoctrine()->getManager();
+        $reserva = $em->getRepository('EmpresaBundle:Reserva')->find($id);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($reserva);
-            $em->flush();
+        if (!$reserva){
+            throw $this->createNotFoundException('id incorrecta');
         }
 
-        return $this->redirectToRoute('reserva_index');
+        $em->remove($reserva);
+        $em->flush();
+        $result['status'] = 'ok';
+        return new Response(json_encode($result), 200);
     }
 
     /**
