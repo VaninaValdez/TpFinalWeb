@@ -9,7 +9,7 @@ export class Usuario {
     password: string;
     perfil: string;
 
-    constructor(apellido?: string, nombres?: string, dni?: number, email?: string, tel?: number, username?: string, password?: string, perfil?: string) {
+constructor(apellido?: string, nombres?: string, dni?: number, email?: string, tel?: number, username?: string, password?: string, perfil?: string) {
         this.apellido = apellido;
         this.nombres = nombres;
         this.dni = dni;

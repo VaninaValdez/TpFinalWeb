@@ -10,40 +10,21 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
-        <a class="nav-link" href="#">Home
+        <a class="nav-link" [routerLink]="['home']">Home
           <span class="sr-only">(current)</span>
         </a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Link</a>
+      <li class="nav-item" >
+        <a class="nav-link" [routerLink]="['usuarios']">Administracion de usuarios</a>
       </li>
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
-          aria-expanded="false">
-          Dropdown
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="#">Action</a>
-          <a class="dropdown-item" href="#">Another action</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#">Something else here</a>
-        </div>
+
+      <li class="nav-item" >
+        <a class="nav-link" href="#" [routerLink]="['vehiculos']">Administracion Vehiculos</a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link disabled" href="#">Disabled</a>
+      <li class="nav-item" >
+        <a class ="nav-link" href="#" [routerLink]="['reservas']">Reservas de vehiculos</a>
       </li>
-      <li class="nav-item">
-        <a [routerLink]="['home']">Home</a>
-      </li>
-      <li class="nav-item">
-        <a [routerLink]="['about']">About</a>
-        </li>
-        <li class="nav-item">
-          <a *ngIf="!authenticationService.userLoggedIn" [routerLink]="['login']">(Login)</a>
-          <a *ngIf="authenticationService.userLoggedIn" [routerLink]="['login']" (click)="logout()">
-            {{authenticationService.userLogged.username}} (logout)
-          </a>
-        </li>
+
     </ul>
     <form class="form-inline my-2 my-lg-0">
       <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">

@@ -1,3 +1,167 @@
-<p>
-  administrador works!
-</p>
+<div class="container">
+  <div class="row" class="col-md- col-md-offset-3">
+    <form class="form" #notasform="ngForm" novalidate>
+
+      <h2 class="titulo">Alta de Usuarios</h2>
+
+      <div class="form-group">
+        <input type="number" name="userId" [(ngModel)]="user.id" placeholder="Ingrese Id" #userId="ngModel"
+        class="form-control" required>
+        <span *ngIf="!userId.valid && userId.touched">
+          <div [hidden]="!userName.errors.required" class="alert-danger">
+            campo obligatorio
+          </div>
+        </span>
+      </div>
+      <div class="form-group">
+        <input type="text"  [(ngModel)]="user.apellido" placeholder="Ingrese Apellido"
+        name="userLastname" #userLastname="ngModel"  class="form-control" required>
+        <span *ngIf="userLastname.invalid && (userLastname.dirty || userLastname.touched)">
+          <div [hidden]="!userLastName.errors.required" class="alert-danger">
+            campo obligatorio
+          </div>
+        </span>
+      </div>
+      <div class="form-group">
+        <input type="text" name="userName" [(ngModel)]="user.nombre" placeholder="Ingrese Nombre" #userName="ngModel"
+        class="form-control" required>
+        <span *ngIf="!userName.valid && userName.touched">
+          <div [hidden]="!userName.errors.required" class="alert-danger">
+            campo obligatorio
+          </div>
+        </span>
+      </div>
+      <div class="form-group">
+        <input type="password" name="userPass" [(ngModel)]="user.pass" placeholder="Ingrese Contraseña" #userPass="ngModel"
+        class="form-control" required>
+        <span *ngIf="!userPass.valid && userPass.touched">
+          <div [hidden]="!userPass.errors.required" class="alert-danger">
+            campo obligatorio
+          </div>
+        </span>
+      </div>
+      <div class="form-group">
+        <input type="number" name="userDni" [(ngModel)]="user.dni" placeholder="Ingrese DNI" #userDni="ngModel"
+        class="form-control" required>
+        <span *ngIf="!userDni.valid && userDni.touched">
+          <div [hidden]="!userDni.errors.required" class="alert-danger">
+            campo obligatorio
+          </div>
+        </span>
+      </div>
+      <div class="form-group">
+        <input type="email" name="userEmail" [(ngModel)]="user.email" placeholder="Ingrese Usuario" #userEmail="ngModel"
+        class="form-control" required>
+        <span *ngIf="!userEmail.valid && userEmail.touched">
+          <div [hidden]="!userEmail.errors.required" class="alert-danger">
+            campo obligatorio
+          </div>
+        </span>
+      </div>
+      <div class="form-group">
+        <input type="number" name="userPhone" [(ngModel)]="user.telefono" placeholder="Ingrese Usuario" #userPhone="ngModel"
+        class="form-control" required>
+        <span *ngIf="!userPhone.valid && userPhone.touched">
+          <div [hidden]="!userPhone.errors.required" class="alert-danger">
+            campo obligatorio
+          </div>
+        </span>
+      </div>
+      <div class="form-group">
+        <select (change)="aplicardescuento($event)" class="form-control">
+          <option value="X">Seleccione un Rol</option>
+          <option value="1">Administrador</option>
+          <option value="2">Administrativo</option>
+          <option value="3">Cliente</option>
+        </select>
+      </div>
+
+      <div class="alert-dark" *ngIf="!notasform.valid && notasform.touched">
+        Completar datos obligatorios
+      </div>
+
+      <button type="button" class="btn btn-primary" (click)="darAlta()" [disabled]="!notasform.valid" data-toggle="modal" data-target="#dialogo1">Alta</button>
+
+    </form>
+  </div>
+
+  <!-- Datatable -->
+  <table class="table table-striped" [mfData]="evaluaciones" #mf="mfDataTable" [mfRowsOnPage]="4">
+    <thead>
+      <tr>
+        <th style="width: 10%">
+          <mfDefaultSorter by="lu">Id</mfDefaultSorter>
+        </th>
+        <th style="width: 10%">
+          <mfDefaultSorter by="notaConcepto">Apellido</mfDefaultSorter>
+        </th>
+        <th style="width: 10%">
+          <mfDefaultSorter by="notaEscrito">Nombre</mfDefaultSorter>
+        </th>
+        <th style="width: 10%">
+          <mfDefaultSorter by="notaEscrito">DNI</mfDefaultSorter>
+        </th>
+        <th style="width: 10%">
+          <mfDefaultSorter by="notaEscrito">E-mail</mfDefaultSorter>
+        </th>
+        <th style="width: 10%">
+          <mfDefaultSorter by="notaEscrito">Telefono</mfDefaultSorter>
+        </th>
+        <th style="width: 10%">
+          <mfDefaultSorter by="notaEscrito">Usuario</mfDefaultSorter>
+        </th>
+        <th style="width: 10%">
+          <mfDefaultSorter by="notaEscrito">Perfil</mfDefaultSorter>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of mf.data">
+        <td>{{item.lu}}</td>
+        <td>{{item.notaConcepto}}</td>
+        <td>{{item.notaEscrito}}</td>
+        <td>{{item.notaOral}}</td>
+        <td>
+          <button class="btn-danger" (click)="borrarEvaluacion(item)">Borrar</button>
+          <button class="btn-dark" (click)="borrarEvaluacion(item)">Modificar</button>
+        </td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="4">
+          <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25]"></mfBootstrapPaginator>
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+</div>
+<!-- Aca comienza el modal -->
+<div class="modal fade" id="dialogo1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- cabecera del diálogo -->
+      <div class="modal-header">
+        <h4 class="modal-title">Modificar</h4>
+        <button type="button" class="close" data-dismiss="modal">X</button>
+      </div>
+
+      <!-- cuerpo del diálogo -->
+      <div class="modal-body">
+        <label>Legajo: {{eva.lu}}</label>
+        <br>
+        <label>Nota Final: {{notaFinal}}</label>
+        <br>
+        <label>Promedio: {{promedio}}</label>
+      </div>
+
+      <!-- pie del diálogo -->
+      <div class="modal-footer">
+        <button (click)="enviarEvaluacion()" type="button" class="btn btn-secondary" data-dismiss="modal">Guardar</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+      </div>
+
+    </div>
+  </div>
+</div>
