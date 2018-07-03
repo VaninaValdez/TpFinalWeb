@@ -7,18 +7,12 @@
         </div>
         <div class="w-100"></div>
         <div class="form-inline mt-2">
-          <div class="col-2 col-sm-2">Para</div>
+          <div class="col-2 col-sm-2">Usuario</div>
           <div class="col-10 col-sm-10">
             <input class="form-control" [(ngModel)]="mensaje.para" placeholder="Ingrese nro destino">
           </div>
         </div>
-        <div class="form-inline mt-2">
-          <div class="col-2 col-sm-2">De</div>
-          <div class="col-10 col-sm-10">
-            <input class="form-control" [(ngModel)]="mensaje.desde" placeholder="Su numero">
-          </div>
-        </div>
-        <div class="row form-group">
+        <div class="">
           <label>Empresa Destino:</label>
           <select [(ngModel)]="mensaje.empresa" name="empresa">
             <option *ngFor="let empresa of empresas" [ngValue]="empresa">{{empresa.nombre}}</option>
