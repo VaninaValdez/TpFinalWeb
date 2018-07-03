@@ -24,7 +24,7 @@ export class HomeComponent implements OnInit {
     public authenticationService: UsuarioService) {
     //  this.usuario = this.authenticationService.userLogged;
     this.usuario = new Usuario('', 'Maty', 111, 'matygise@mati.gise', 77, 'maty', 'gise', 'cliente');
-    this.vehiculos = this.tutuService.getVehiculos();
+    // this.vehiculos = this.tutuService.getAll();
   }
 
   elegir(auto: Vehiculo) {

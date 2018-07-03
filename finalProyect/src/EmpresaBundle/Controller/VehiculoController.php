@@ -60,7 +60,6 @@ class VehiculoController extends Controller
         $request->request->replace($data);
         
         $vehiculo = new Vehiculo();
-        $vehiculo->setId($request->request->get('id'));
         $vehiculo->setPatente($request->request->get('patente'));
         $vehiculo->setMarca($request->request->get('marca'));
         $vehiculo->setModelo($request->request->get('modelo'));
@@ -69,7 +68,7 @@ class VehiculoController extends Controller
         
         $em = $this->getDoctrine()->getManager();
         
-        $em->persist($reserva);
+        $em->persist($vehiculo);
         $em->flush();
         
         $result['status'] = 'ok';
@@ -106,7 +105,7 @@ class VehiculoController extends Controller
         $em = $this->getDoctrine()->getManager();
         $vehiculo = $em->getRepository('EmpresaBundle:Vehiculo')->find($id);
 
-        $vehiculo->setId($request->request->get('id'));
+        // $vehiculo->setId($request->request->get('id'));
         $vehiculo->setPatente($request->request->get('patente'));
         $vehiculo->setMarca($request->request->get('marca'));
         $vehiculo->setModelo($request->request->get('modelo'));
@@ -115,7 +114,7 @@ class VehiculoController extends Controller
         
         $em = $this->getDoctrine()->getManager();
         
-        $em->persist($vehiculo);
+        // $em->persist($vehiculo);
         $em->flush();
         
         $result['status'] = 'ok';

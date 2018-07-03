@@ -10,7 +10,7 @@ import { Usuario } from '../models/usuario';
 
 export class UsuarioService {
 
-  userLoggedIn: boolean = false;
+  userLoggedIn = false;
   userLogged: Usuario;
   port = '';
 
