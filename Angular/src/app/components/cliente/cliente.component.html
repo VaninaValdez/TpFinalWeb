@@ -1,34 +1,26 @@
 <div class="container">
-  <div class="row" class="col-md- col-md-offset-3">
-    <div class="container">
-      <h2 class="titulo">Reserva de Vehiculos</h2>
-      <p>Los mejores autos del país!!</p>
-      <div id="accordion">
-        <div class="card">
-          <div class="card-header">
-            <a class="card-link" data-toggle="collapse" href="#collapseOne">
-              Novedad
-            </a>
-          </div>
-          <div id="collapseOne" class="collapse show" data-parent="#accordion">
-            <div class="card-body">
-              <div class="media">
-        <img src="img_avatar1.png" class="align-self-start mr-3" style="width:60px">
-        <div class="media-body">
-          <h4>Soy una novedad</h4>
-          <p>Aca se mostrarian las novedades que escriben los usuarios, que se yo :'v</p>
-          <p>Seguro que si lo muestro por aca va a ser un quilombo</p>
-          <p>Encima cuando se borre, se van a borrar aca tambien??</p>
-        </div>
-      </div>
-
-            </div>
-          </div>
-        </div>
+  <div class="row">
+    <div class="col-12">
+      listado de vehiculos disponibles
+    </div>
+    <div *ngIf="!esReserva">
+        <div class="col-2"
+        *ngFor="let tutu of vehiculos">
+        <a (click)="elegir(tutu)"><img src="./assets/img/{{tutu.pathimagen}}" alt="imagen no cargada" class="img-thumbnail"></a>
       </div>
     </div>
 
+    <div *ngIf="esReserva">
+      datos del vehiculo: {{vehiculo.patente}}
+      datos del usuario: {{usuario.nombres}}
+      dias: <input type="number" [(ngModel)]="reserva.dias">
+      costoRenta: <input type="number" [(ngModel)]="reserva.costoRenta">
+      fechaRenta: <input type="date" [(ngModel)]="reserva.fechaRenta">
+      <button type="button" (click)="crearReserva()">Reservar</button>
+    </div>
+
   </div>
+
 
   <!-- Datatable hay que revisarla!!-->
   <h3 class="titulo">Reservas</h3>

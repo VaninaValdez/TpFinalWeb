@@ -12,20 +12,21 @@ export class UsuarioService {
 
   userLoggedIn: boolean = false;
   userLogged: Usuario;
-  constructor(private http: Http) { }
+
+  constructor() { }
 
   login(usuario: string, password: string) {
     // nico :3
-      return this.http.post('http://localhost/FinalWeb/finalProyect/web/app_dev.php/usuario/authenticate',
+    return this.http.post('http://localhost/FinalWeb/finalProyect/web/app_dev.php/usuario/authenticate',
       JSON.stringify({ usuario: usuario, password: password }))
-          .map(res => res.json());
+      .map(res => res.json());
   }
 
   logout() {
-      // remove user from local storage to log user out
-      localStorage.removeItem('currentUser');
-      this.userLogged = new Usuario();
-      this.userLoggedIn = false;
+    // remove user from local storage to log user out
+    localStorage.removeItem('currentUser');
+    this.userLogged = new Usuario();
+    this.userLoggedIn = false;
   }
 
 
