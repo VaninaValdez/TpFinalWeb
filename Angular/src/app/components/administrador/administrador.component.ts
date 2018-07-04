@@ -34,10 +34,12 @@ public refreshListUser() {
   );
 }
 
-public updateUser(user: any) {
-  this.servicio.update(user).subscribe(
+public updateUser() {
+  this.servicio.update(this.user).subscribe(
     result => {
       console.log('update correcto');
+      this.btnactualizar = false;
+      this.user = new Usuario();
       this.refreshListUser();
     },
     error => console.log('error: ' + error)

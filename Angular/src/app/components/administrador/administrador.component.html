@@ -8,7 +8,7 @@
         <input type="text"  [(ngModel)]="user.apellido" placeholder="Ingrese Apellido"
         name="userLastname" #userLastname="ngModel"  class="form-control" required>
         <span *ngIf="userLastname.invalid && (userLastname.dirty || userLastname.touched)">
-          <div [hidden]="!userLastName.errors.required" class="alert-danger">
+          <div class="alert-danger">
             campo obligatorio
           </div>
         </span>
@@ -17,7 +17,7 @@
         <input type="text" name="userName" [(ngModel)]="user.nombre" placeholder="Ingrese Nombre" #userName="ngModel"
         class="form-control" required>
         <span *ngIf="!userName.valid && userName.touched">
-          <div [hidden]="!userName.errors.required" class="alert-danger">
+          <div class="alert-danger">
             campo obligatorio
           </div>
         </span>
@@ -26,7 +26,7 @@
         <input type="password" name="userPass" [(ngModel)]="user.password" placeholder="Ingrese Contraseña" #userPass="ngModel"
         class="form-control" required>
         <span *ngIf="!userPass.valid && userPass.touched">
-          <div [hidden]="!userPass.errors.required" class="alert-danger">
+          <div class="alert-danger">
             campo obligatorio
           </div>
         </span>
@@ -35,7 +35,7 @@
         <input type="number" name="userDni" [(ngModel)]="user.dni" placeholder="Ingrese DNI" #userDni="ngModel"
         class="form-control" required>
         <span *ngIf="!userDni.valid && userDni.touched">
-          <div [hidden]="!userDni.errors.required" class="alert-danger">
+          <div class="alert-danger">
             campo obligatorio
           </div>
         </span>
@@ -44,7 +44,7 @@
         <input type="email" name="userEmail" [(ngModel)]="user.email" placeholder="Ingrese Email" #userEmail="ngModel"
         class="form-control" required>
         <span *ngIf="!userEmail.valid && userEmail.touched">
-          <div [hidden]="!userEmail.errors.required" class="alert-danger">
+          <div class="alert-danger">
             campo obligatorio
           </div>
         </span>
@@ -53,7 +53,7 @@
         <input type="number" name="userPhone" [(ngModel)]="user.telefono" placeholder="Ingrese Telefono" #userPhone="ngModel"
         class="form-control" required>
         <span *ngIf="!userPhone.valid && userPhone.touched">
-          <div [hidden]="!userPhone.errors.required" class="alert-danger">
+          <div class="alert-danger">
             campo obligatorio
           </div>
         </span>
@@ -62,34 +62,33 @@
         <input type="text" name="userUser" [(ngModel)]="user.usuario" placeholder="Ingrese Usuario" #userUser="ngModel"
         class="form-control" required>
         <span *ngIf="!userUser.valid && userUser.touched">
-          <div [hidden]="!userUser.errors.required" class="alert-danger">
+          <div class="alert-danger">
             campo obligatorio
           </div>
         </span>
       </div>
       <div class="form-group">
-        <input type="text" name="userPerfil" [(ngModel)]="user.perfil" placeholder="Ingrese Perfil" #userPerfil="ngModel"
-        class="form-control" required>
+        <select [(ngModel)]="user.perfil" class="form-control" placeholder="Selecione Perfil" #userPerfil="ngModel" name="userPerfil">
+          <option value="administrador">Administrador</option>
+          <option value="administrativo">Administrativo</option>
+          <option value="cliente">Cliente</option>
+        </select>
         <span *ngIf="!userPerfil.valid && userPerfil.touched">
-          <div [hidden]="!userPerfil.errors.required" class="alert-danger">
+          <div class="alert-danger">
             campo obligatorio
           </div>
         </span>
       </div>
-      <!-- <div class="form-group">
-        <select (change)="aplicardescuento($event)" class="form-control">
-          <option value="X">Seleccione un Rol</option>
-          <option value="1">Administrador</option>
-          <option value="2">Administrativo</option>
-          <option value="3">Cliente</option>
-        </select>
-      </div> -->
 
       <div class="alert-dark" *ngIf="!notasform.valid && notasform.touched">
         Completar datos obligatorios
       </div>
-
+    <div *ngIf="!btnactualizar">
       <button type="button" class="btn btn-primary" (click)="saveUser()" [disabled]="!notasform.valid">Guardar</button>
+    </div>
+    <div *ngIf="btnactualizar">
+      <button type="button" class="btn btn-primary" (click)="updateUser()" [disabled]="!notasform.valid">Actualizar</button>
+    </div>
 
     </form>
   </div>
