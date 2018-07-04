@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Usuario } from '../../models/usuario';
+import { Vehiculo } from '../../models/vehiculo';
+
 
 @Component({
   selector: 'app-reserva',
@@ -6,8 +9,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./reserva.component.css']
 })
 export class ReservaComponent implements OnInit {
-
-  constructor() { }
+esReserva = false;
+vehiculos = [];
+  constructor() {
+this.esReserva = false;
+   }
 
   ngOnInit() {
   }

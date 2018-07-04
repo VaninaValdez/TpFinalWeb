@@ -1,4 +1,76 @@
-  <!--formulario usuarios-->
-  <p>
-    izi
-  </p>
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <h2 class="titulo">listado de vehiculos disponibles</h2>
+    </div>
+    <div *ngIf="!esReserva">
+        <div class="col-2"
+        *ngFor="let tutu of vehiculos">
+        <a (click)="elegir(tutu)"><img src="./assets/img/{{tutu.pathimagen}}" alt="imagen no cargada" class="img-thumbnail"></a>
+      </div>
+    </div>
+
+    <div *ngIf="esReserva">
+      datos del vehiculo: {{vehiculo.patente}}
+      datos del usuario: {{usuario.nombres}}
+      dias: <input type="number" [(ngModel)]="reserva.dias">
+      costoRenta: <input type="number" [(ngModel)]="reserva.costoRenta">
+      fechaRenta: <input type="date" [(ngModel)]="reserva.fechaRenta">
+      <button type="button" (click)="crearReserva()">Reservar</button>
+    </div>
+
+  </div>
+
+
+  <!-- Datatable hay que revisarla!!-->
+  <h3 class="titulo">Reservas</h3>
+  <table class="table table-striped" [mfData]="reservas" #mf="mfDataTable" [mfRowsOnPage]="4">
+    <thead>
+      <tr>
+        <th style="width: 10%">
+          <mfDefaultSorter by="id">Id</mfDefaultSorter>
+        </th>
+        <th style="width: 10%">
+          <mfDefaultSorter by="usuario">Usuario</mfDefaultSorter>
+        </th>
+        <th style="width: 10%">
+          <mfDefaultSorter by="vehiculo">Vehiculo</mfDefaultSorter>
+        </th>
+        <th style="width: 10%">
+          <mfDefaultSorter by="dias">Dias</mfDefaultSorter>
+        </th>
+        <th style="width: 10%">
+          <mfDefaultSorter by="costoRenta">Costo</mfDefaultSorter>
+        </th>
+        <th style="width: 10%">
+          <mfDefaultSorter by="fechaRenta">Fecha de Renta</mfDefaultSorter>
+        </th>
+        <th style="width: 10%">
+          <mfDefaultSorter by="estado">Estado</mfDefaultSorter>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of mf.data">
+        <td>{{item.id}</td>
+        <td>{{item.usuario}}</td>
+        <td>{{item.vehiculo}}</td>
+        <td>{{item.dias}}</td>
+        <td>{{item.costoRenta}}</td>
+        <td>{{item.fechaRenta}}</td>
+        <td>{{item.estado}}</td>
+        <td>
+          <button class="btn-danger" (click)="eliminarReserva(item)">Borrar</button>
+          <button class="btn-dark" (click)="elegirReserva(item)">Modificar</button>
+        </td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="4">
+          <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25]"></mfBootstrapPaginator>
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+</div>

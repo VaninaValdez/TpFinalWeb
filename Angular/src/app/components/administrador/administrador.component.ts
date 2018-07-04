@@ -26,7 +26,7 @@ ngOnInit() {
 public refreshListUser() {
   this.servicio.getAll().subscribe(
     result => {
-      this.users = JSON.parse(result.users);
+      this.users = JSON.parse(result.usuarios);
     },
     error => {
       console.log(error);

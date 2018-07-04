@@ -23,7 +23,7 @@
         </span>
       </div>
       <div class="form-group">
-        <input type="password" name="userPass" [(ngModel)]="user.pass" placeholder="Ingrese Contraseña" #userPass="ngModel"
+        <input type="password" name="userPass" [(ngModel)]="user.password" placeholder="Ingrese Contraseña" #userPass="ngModel"
         class="form-control" required>
         <span *ngIf="!userPass.valid && userPass.touched">
           <div [hidden]="!userPass.errors.required" class="alert-danger">
@@ -59,7 +59,7 @@
         </span>
       </div>
       <div class="form-group">
-        <input type="text" name="userUser" [(ngModel)]="user.usuario" placeholder="Ingrese Usuario" #userPhone="ngModel"
+        <input type="text" name="userUser" [(ngModel)]="user.usuario" placeholder="Ingrese Usuario" #userUser="ngModel"
         class="form-control" required>
         <span *ngIf="!userUser.valid && userUser.touched">
           <div [hidden]="!userUser.errors.required" class="alert-danger">
@@ -68,7 +68,7 @@
         </span>
       </div>
       <div class="form-group">
-        <input type="text" name="userPerfil" [(ngModel)]="user.perfil" placeholder="Ingrese Perfil" #userPhone="ngModel"
+        <input type="text" name="userPerfil" [(ngModel)]="user.perfil" placeholder="Ingrese Perfil" #userPerfil="ngModel"
         class="form-control" required>
         <span *ngIf="!userPerfil.valid && userPerfil.touched">
           <div [hidden]="!userPerfil.errors.required" class="alert-danger">
@@ -76,14 +76,14 @@
           </div>
         </span>
       </div>
-      <div class="form-group">
+      <!-- <div class="form-group">
         <select (change)="aplicardescuento($event)" class="form-control">
           <option value="X">Seleccione un Rol</option>
           <option value="1">Administrador</option>
           <option value="2">Administrativo</option>
           <option value="3">Cliente</option>
         </select>
-      </div>
+      </div> -->
 
       <div class="alert-dark" *ngIf="!notasform.valid && notasform.touched">
         Completar datos obligatorios
@@ -132,9 +132,13 @@
         <td>{{item.perfil}}</td>
         <td>
           <button class="btn-danger" (click)="eliminarUser(item)">Borrar</button>
-          <button class="btn-dark" (click)="borrarUser(item)">Modificar</button>
+          <button class="btn-dark" (click)="elegirUser(item)">Modificar</button>
         </td>
       </tr>
+
+
+
+
     </tbody>
     <tfoot>
       <tr>
