@@ -6,8 +6,7 @@ export class Novedad {
   texto: string;
   estado: string;
 
-  constructor(id?: number, usuario?: Usuario, texto?: string, estado?: string) {
-    this.id = id;
+  constructor(usuario?: Usuario, texto?: string, estado?: string) {
     this.usuario = usuario;
     this.texto = texto;
     this.estado = estado;

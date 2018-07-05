@@ -60,14 +60,19 @@ class NovedadController extends Controller
         $request->request->replace($data);
         
         $novedad = new Novedad();
-        $novedad->setId($request->request->get('id'));
-        $novedad->setUsuario($request->request->get('usuario'));
+        
+        $usuarioArray= $request->request->get('usuario');
+        $idusuario = $usuarioArray['id'];
+        $em = $this->getDoctrine()->getManager();
+        $usuario = $em->getRepository("EmpresaBundle:Usuario")->find($idusuario);
+        $novedad->setUsuario($usuario);
+
         $novedad->setTexto($request->request->get('texto'));
         $novedad->setEstado($request->request->get('estado'));
         
         $em = $this->getDoctrine()->getManager();
         
-        $em->persist($reserva);
+        $em->persist($novedad);
         $em->flush();
         
         $result['status'] = 'ok';
@@ -104,7 +109,6 @@ class NovedadController extends Controller
         $em = $this->getDoctrine()->getManager();
         $novedad = $em->getRepository('EmpresaBundle:Novedad')->find($id);
 
-        $novedad->setId($request->request->get('id'));
         $novedad->setUsuario($request->request->get('usuario'));
         $novedad->setTexto($request->request->get('texto'));
         $novedad->setEstado($request->request->get('estado'));

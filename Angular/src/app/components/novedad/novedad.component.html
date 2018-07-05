@@ -7,74 +7,48 @@
         </div>
         <div class="w-100"></div>
         <div class="form-inline mt-2">
-          <div class="col-2 col-sm-2">Usuario</div>
-          <div class="col-10 col-sm-10">
-            <input class="form-control" [(ngModel)]="mensaje.para" placeholder="Ingrese nro destino">
+          <div class="col-3 col-sm-3">Usuario</div>
+          <div class="col-9 col-sm-9">
+            <!-- <input class="form-control" placeholder="Ingrese usuario" name="novedadUsuario" [(ngModel)]="novedad.usuario" #novedadUsuario="ngModel"> -->
+            <select [(ngModel)]="novedad.usuario" class="form-control"
+                name="usuario" #usuarioform="ngModel">
+              <!-- <option *ngFor="let usuario of usuarios" [ngValue]="usuario">{{usuario.usuario}}</option> -->
+              <option [ngValue]="autenticacion.userLogged">{{autenticacion.userLogged.usuario}}</option>
+            </select>
           </div>
         </div>
-        <div class="">
-          <label>Empresa Destino:</label>
-          <select [(ngModel)]="mensaje.empresa" name="empresa">
-            <option *ngFor="let empresa of empresas" [ngValue]="empresa">{{empresa.nombre}}</option>
+        <div class="col-sm-12">
+          <textarea class="form-control" name="novedadTexto" [(ngModel)]="novedad.texto" #novedadTexto="ngModel"></textarea>
+        </div>
+        <div class="form-group col-3 col-sm-3">
+          <select class="form-control" #novedadEstado="ngModel" name="novedadEstado" [(ngModel)]="novedad.estado">
+            <option value="pendiente">Pendiente</option>
+            <option value="procesado">Procesado</option>
           </select>
         </div>
-        <div class="col-6 col-sm-6">Tu mensaje</div>
-        <div class="col-6 col-sm-6">{{maximo - longMensaje}} caracteres restantes </div>
-        <div class="col-sm-10">
-          <textarea class="form-control" [(ngModel)]="mensaje.texto" (ngModelChange)="cambiarLongitud()" [maxlength]="maximo"></textarea>
-        </div>
         <div class="col-5 col-sm-4 ml-auto mt-2">
-          <button class="btn btn-block btn-primary" data-toggle="modal" data-target="#smsmodal">Enviar!</button>
-          <button type="button" class="btn btn-info btn-lg" (click)="actualizarMensaje()">Actualizar</button>
-          <button type="button" class="btn btn-info btn-lg" (click)="mostrarHistorico()" >Historico</button>
-
+          <button class="btn btn-block btn-primary" (click)="saveNovedad()">Enviar</button>
         </div>
-    </div>
-    <!-- Modal -->
-    <div class="modal fade" id="smsmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-         aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Confirmar envio de mensaje</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <h5>Para: {{mensaje.para}}</h5>
-            <h5>De: {{mensaje.desde}}</h5>
-            <h5>Mensaje</h5>
-            <p> {{mensaje.texto}}</p>
-          </div>
-          <div class="modal-footer">
-            <button type="button" (click)="enviarMensaje()" class="btn btn-secondary" data-dismiss="modal">Confirmar</button>
-          </div>
-        </div>
-      </div>
     </div>
 
 
   <!-- Datatable -->
-  <table class="table table-striped" [mfData]="mensajes" #mf="mfDataTable" [mfRowsOnPage]="4">
+  <table class="table table-striped" [mfData]="novedades" #mf="mfDataTable" [mfRowsOnPage]="4">
     <thead>
     <tr>
-      <th style="width: 10%"> <mfDefaultSorter by="desde">Desde</mfDefaultSorter> </th>
-      <th style="width: 10%"> <mfDefaultSorter by="hasta">Hasta</mfDefaultSorter> </th>
+      <th style="width: 20%"> <mfDefaultSorter by="desde">Usuario</mfDefaultSorter> </th>
       <th style="width: 70%"> <mfDefaultSorter by="texto">Texto</mfDefaultSorter> </th>
-      <th style="width: 10%"> <mfDefaultSorter by="fecha">Fecha</mfDefaultSorter> </th>
-      <th style="width: 10%"> Comandos </th>
+      <th style="width: 10%"> <mfDefaultSorter by="texto">Estado</mfDefaultSorter> </th>
     </tr>
     </thead>
     <tbody>
     <tr *ngFor="let item of mf.data">
-      <td>{{item.desde}}</td>
-      <td>{{item.hasta}}</td>
+      <td>{{item.usuario.usuario}}</td>
       <td>{{item.texto}}</td>
-      <td>{{item.fecha.timestamp * 1000 | date: 'dd/MM/yyyy'}}</td>
+      <td>{{item.estado}}</td>
       <td>
-        <button class="btn" (click)="borrarMensaje(item)">Del</button>
-        <button class="btn" (click)="elegirMensaje(item)">Upd</button>
+        <button class="btn" (click)="eliminarNovedad(item)">eliminar</button>
+        <button class="btn">Upd</button>
       </td>
     </tr>
     </tbody>
