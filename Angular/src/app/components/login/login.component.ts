@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { UsuarioService } from './../../services/usuario.service';
 import { Usuario } from '../../models/usuario';
+import { AutentifiacionService } from '../../services/autentifiacion.service';
 
 
 @Component({
@@ -16,7 +17,7 @@ export class LoginComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
     private router: Router,
-    private authenticationService: UsuarioService) {
+    private authenticationService: AutentifiacionService) {
   }
 
   ngOnInit() {
@@ -29,10 +30,9 @@ login() {
                   var user = JSON.parse(data.usuario);
                   console.log(user);
                   if (user.usuario != null) {
-                      // vbles para mostrar-ocultar cosas en el header
-                      this.authenticationService.userLoggedIn = true;
-                      this.authenticationService.userLogged = user;
-                      // localstorage usado para mostrar o no un componente
+                      // setea el usuario logeado para que pueda ser escuchado en el header
+                      this.authenticationService.setUserLogged(user);
+                      //
                       localStorage.setItem('currentUser', JSON.stringify(user));
                       this.router.navigateByUrl('home');
                   }

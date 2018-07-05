@@ -1,76 +1,114 @@
 <div class="container">
   <div class="row">
-    <div class="col-12">
-      <h2 class="titulo">listado de vehiculos disponibles</h2>
-    </div>
-    <div *ngIf="!esReserva">
-        <div class="col-2"
-        *ngFor="let tutu of vehiculos">
-        <a (click)="elegir(tutu)"><img src="./assets/img/{{tutu.pathimagen}}" alt="imagen no cargada" class="img-thumbnail"></a>
+    <h1 class="my-4 text-center text-lg-left">Autos Disponibles</h1>
+
+
+
+    <div class="row text-center text-lg-left">
+      <div class="col-lg-3 col-md-4 col-xs-6" *ngFor="let tutu of vehiculos">
+        <a (click)="elegirVehiculo(tutu)" class="d-block mb-4 h-100" data-toggle="modal" data-target="#exampleModal">
+          <img class="img-fluid img-thumbnail" src="./assets/img/{{tutu.pathimagen}}" alt="si lees esto la imagen no se cargo">
+        </a>
       </div>
     </div>
 
-    <div *ngIf="esReserva">
-      datos del vehiculo: {{vehiculo.patente}}
-      datos del usuario: {{usuario.nombres}}
-      dias: <input type="number" [(ngModel)]="reserva.dias">
-      costoRenta: <input type="number" [(ngModel)]="reserva.costoRenta">
-      fechaRenta: <input type="date" [(ngModel)]="reserva.fechaRenta">
-      <button type="button" (click)="crearReserva()">Reservar</button>
-    </div>
-
   </div>
+</div>
 
 
-  <!-- Datatable hay que revisarla!!-->
-  <h3 class="titulo">Reservas</h3>
-  <table class="table table-striped" [mfData]="reservas" #mf="mfDataTable" [mfRowsOnPage]="4">
-    <thead>
-      <tr>
-        <th style="width: 10%">
-          <mfDefaultSorter by="id">Id</mfDefaultSorter>
-        </th>
-        <th style="width: 10%">
-          <mfDefaultSorter by="usuario">Usuario</mfDefaultSorter>
-        </th>
-        <th style="width: 10%">
-          <mfDefaultSorter by="vehiculo">Vehiculo</mfDefaultSorter>
-        </th>
-        <th style="width: 10%">
-          <mfDefaultSorter by="dias">Dias</mfDefaultSorter>
-        </th>
-        <th style="width: 10%">
-          <mfDefaultSorter by="costoRenta">Costo</mfDefaultSorter>
-        </th>
-        <th style="width: 10%">
-          <mfDefaultSorter by="fechaRenta">Fecha de Renta</mfDefaultSorter>
-        </th>
-        <th style="width: 10%">
-          <mfDefaultSorter by="estado">Estado</mfDefaultSorter>
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let item of mf.data">
-        <td>{{item.id}</td>
-        <td>{{item.usuario}}</td>
-        <td>{{item.vehiculo}}</td>
-        <td>{{item.dias}}</td>
-        <td>{{item.costoRenta}}</td>
-        <td>{{item.fechaRenta}}</td>
-        <td>{{item.estado}}</td>
-        <td>
-          <button class="btn-danger" (click)="eliminarReserva(item)">Borrar</button>
-          <button class="btn-dark" (click)="elegirReserva(item)">Modificar</button>
-        </td>
-      </tr>
-    </tbody>
-    <tfoot>
-      <tr>
-        <td colspan="4">
-          <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25]"></mfBootstrapPaginator>
-        </td>
-      </tr>
-    </tfoot>
-  </table>
+<!-- Datatable hay que revisarla!!-->
+<h3 class="titulo">Reservas</h3>
+<table class="table table-striped" [mfData]="reservas" #mf="mfDataTable" [mfRowsOnPage]="4">
+  <thead>
+    <tr>
+      <th style="width: 10%">
+        <mfDefaultSorter by="id">Id</mfDefaultSorter>
+      </th>
+      <th style="width: 10%">
+        <mfDefaultSorter by="usuario">Usuario</mfDefaultSorter>
+      </th>
+      <th style="width: 10%">
+        <mfDefaultSorter by="vehiculo">Vehiculo</mfDefaultSorter>
+      </th>
+      <th style="width: 10%">
+        <mfDefaultSorter by="dias">Dias</mfDefaultSorter>
+      </th>
+      <th style="width: 10%">
+        <mfDefaultSorter by="costoRenta">Costo</mfDefaultSorter>
+      </th>
+      <th style="width: 10%">
+        <mfDefaultSorter by="fechaRenta">Fecha de Renta</mfDefaultSorter>
+      </th>
+      <th style="width: 10%">
+        <mfDefaultSorter by="estado">Estado</mfDefaultSorter>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of mf.data">
+      <td>{{item.id}</td>
+      <td>{{item.usuario}}</td>
+      <td>{{item.vehiculo}}</td>
+      <td>{{item.dias}}</td>
+      <td>{{item.costoRenta}}</td>
+      <td>{{item.fechaRenta}}</td>
+      <td>{{item.estado}}</td>
+      <td>
+        <button class="btn-danger" (click)="eliminarReserva(item)">Borrar</button>
+        <button class="btn-dark" (click)="elegirReserva(item)">Modificar</button>
+      </td>
+    </tr>
+  </tbody>
+  <tfoot>
+    <tr>
+      <td colspan="4">
+        <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25]"></mfBootstrapPaginator>
+      </td>
+    </tr>
+  </tfoot>
+</table>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Reservar Auto</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="container">
+          <form>
+            <div class="form-group">
+              <label for="nombre">Nombre Usuario</label>
+              <input type="text" class="form-control" name="nombre">
+            </div>
+            <div class="form-group">
+              <label for="vehiculo">Vehiculo</label>
+              <input type="text" class="form-control" name="vehiculo"
+              [value]="reserva.vehiculo.marca">
+            </div>
+            <div class="form-group">
+              <label for="fechaRenta">Dias</label>
+              <input type="date" class="form-control" name="fechaRenta">
+            </div>
+            <div class="form-group">
+              <label for="costoRenta">Costo de la Renta</label>
+              <input type="number" class="form-control" name="costoRenta">
+            </div>
+            <div class="form-group">
+              <label for="estado">Estado</label>
+              <input type="estado" class="form-control" name="estado">
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Reservar</button>
+      </div>
+    </div>
+  </div>
 </div>

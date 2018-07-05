@@ -15,14 +15,14 @@
           <span class="sr-only">(current)</span>
         </a>
       </li>
-      <li class="nav-item" >
+      <li *ngIf="perfiladmin" class="nav-item" >
         <a class="nav-link" [routerLink]="['usuarios']">Administracion de usuarios</a>
       </li>
 
-      <li class="nav-item" >
+      <li *ngIf="perfilcliente || perfiladmin" class="nav-item" >
         <a class="nav-link" href="#" [routerLink]="['vehiculos']">Administracion Vehiculos</a>
       </li>
-      <li class="nav-item" >
+      <li *ngIf="perfiladminis || perfiladmin" class="nav-item" >
         <a class ="nav-link" href="#" [routerLink]="['reservas']">Reservas de vehiculos</a>
       </li>
       <li class="nav-item" >
@@ -33,6 +33,7 @@
     <form class="form-inline my-2 my-lg-0">
       <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
       <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+      <button class="button" (click)="logout()">Logout</button>
     </form>
 
   </div>

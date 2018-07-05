@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { UsuarioService } from './../../services/usuario.service';
+import { AutentifiacionService } from '../../services/autentifiacion.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -11,27 +12,35 @@ export class HeaderComponent implements OnInit {
   perfilcliente = false;
   perfiladminis = false;
 
-  constructor(public authenticationService: UsuarioService) {
-    if (this.authenticationService.userLoggedIn) {
-      this.perfiladmin = this.authenticationService.userLogged.perfil === 'administrador';
-      this.perfilcliente = this.authenticationService.userLogged.perfil === 'cliente';
-      this.perfiladminis = this.authenticationService.userLogged.perfil === 'administrativo';
-    }
+  constructor(private router: Router, public servicio: AutentifiacionService) {
    }
 
-  logout() {
-    localStorage.removeItem('currentUser');
-    this.authenticationService.logout();
-  }
-
   ngOnInit() {
+this.actualizar();
+  }
 
+  logout() {
+    this.servicio.logout();
+    this.perfiladmin = this.perfiladminis = this.perfilcliente = false;
+    this.router.navigate(['login']);
   }
-public validar() {
-  if (this.authenticationService.userLoggedIn) {
-    this.perfiladmin = this.authenticationService.userLogged.perfil === 'administrador';
-    this.perfilcliente = this.authenticationService.userLogged.perfil === 'cliente';
-    this.perfiladminis = this.authenticationService.userLogged.perfil === 'administrativo';
-  }
+
+public actualizar() {
+  this.servicio.getObservable().subscribe(
+    result => {
+      if (this.servicio.userLoggedIn !== null) {
+        const perfil = result.perfil;
+        if (perfil === 'administrador') {
+          this.perfiladmin = true; console.log("entro admin");
+        }
+        if (perfil === 'cliente') {
+          this.perfilcliente = true;console.log("entro cliente");
+        }
+        if (perfil === 'administrativo') {
+          this.perfiladminis = true;console.log("entro adminis");
+        }
+      }
+    }
+  );
 }
 }
