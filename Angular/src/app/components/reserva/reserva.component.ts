@@ -4,6 +4,7 @@ import { Vehiculo } from '../../models/vehiculo';
 import { Reserva } from '../../models/reserva';
 import { ReservaService } from '../../services/reserva.service';
 import { VehiculoService } from '../../services/vehiculo.service';
+import { AutentifiacionService } from '../../services/autentifiacion.service';
 
 
 @Component({
@@ -15,17 +16,19 @@ export class ReservaComponent implements OnInit {
   esReserva = false;
   tutu = new Vehiculo();
   usuario = new Usuario();
-  reserva = new Reserva();
+
   vehiculos = [];
   vehiculo: Vehiculo = new Vehiculo();
+  reserva = new Reserva(this.usuario,this.vehiculo);
   reservas = [];
   constructor(public servicio: ReservaService,
-            public servisioTutu: VehiculoService) {
+            public servicioTutu: VehiculoService,
+            public autenticacion: AutentifiacionService) {
     this.esReserva = false;
   }
 
   public traerVehiculos() {
-    this.servisioTutu.getAll().subscribe(
+    this.servicioTutu.getAll().subscribe(
       result => {
         this.vehiculos = JSON.parse(result.vehiculos);
       },
@@ -61,7 +64,8 @@ export class ReservaComponent implements OnInit {
       data => {
         console.log('envio ok');
         console.log('agregado correctamente.');
-        this.reserva = new Reserva();
+
+        this.reserva = new Reserva(new Usuario(), new Vehiculo());
         this.refreshListReserva();
         this.esReserva = false;
         return true;
@@ -81,8 +85,9 @@ export class ReservaComponent implements OnInit {
 
   elegirVehiculo(tutu: any) {
     this.vehiculo = this.vehiculos.filter(x => x === tutu).pop();
+    console.log(this.vehiculo);
     this.reserva.vehiculo = this.vehiculo;
-    // this.reserva.usuario = ;
+    this.reserva.usuario = this.autenticacion.userLogged;
   }
 
   eliminarReserva(reserva: any) {

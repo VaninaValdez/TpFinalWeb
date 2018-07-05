@@ -60,12 +60,25 @@ class ReservaController extends Controller
         $request->request->replace($data);
         
         $reserva = new Reserva();
-        $reserva->setId($request->request->get('id'));
-        $reserva->setUsuario($request->request->get('usuario'));
-        $reserva->setVehiculo($request->request->get('vehiculo'));
+
+        $usuarioArray= $request->request->get('usuario');
+         $idusuario = $usuarioArray['id'];
+         $em = $this->getDoctrine()->getManager();
+         $usuario = $em->getRepository("EmpresaBundle:Usuario")->find($idusuario);
+         $reserva->setUsuario($usuario);
+
+        $usuarioArray= $request->request->get('vehiculo');
+         $idusuario = $usuarioArray['id'];
+         $em = $this->getDoctrine()->getManager();
+         $usuario = $em->getRepository("EmpresaBundle:Vehiculo")->find($idusuario);
+         $reserva->setVehiculo($usuario);
+
+
         $reserva->setDias($request->request->get('dias'));
-        $reserva->setCostoRenta($request->request->get('costoRenta'));
-        $reserva->setFechaRenta($request->request->get('fechaRenta'));
+        $reserva->setCostoRentas($request->request->get('costoRenta'));
+        $fecha = new \DateTime($request->request->get('fechaRenta'));
+        $reserva->setFechaRenta($fecha);
+       
         $reserva->setEstado($request->request->get('estado'));
         
         $em = $this->getDoctrine()->getManager();

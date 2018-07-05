@@ -10,8 +10,7 @@ export class Reserva{
     fechaRenta: Date;
     estado: string ;
 
-    constructor(id?: number, usuario?: Usuario, vehiculo?: Vehiculo, dias?: number, costoRenta?: number, fechaRenta?: Date, estado?: string){
-        this.id=id;
+    constructor(usuario?: Usuario, vehiculo?: Vehiculo, dias?: number, costoRenta?: number, fechaRenta?: Date, estado?: string){
         this.usuario=usuario;
         this.vehiculo=vehiculo;
         this.dias=dias;
