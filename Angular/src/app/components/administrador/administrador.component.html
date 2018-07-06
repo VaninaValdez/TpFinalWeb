@@ -60,7 +60,7 @@
       <div class="form-group">
         <input type="text" name="userUser" [(ngModel)]="user.usuario" placeholder="Ingrese Usuario" #userUser="ngModel"
         class="form-control" required>
-        <span *ngIf="userUser.invalid && (marca.dirty || marca.touched)">
+        <span *ngIf="userUser.invalid && (userUser.dirty || userUser.touched)">
           <div class="alert-danger">
             campo obligatorio
           </div>
@@ -79,7 +79,7 @@
         </span>
       </div>
 
-      <div class="alert-dark" *ngIf="notasform.invalid && (notasForm.dirty || notasform.touched)">
+      <div class="alert-dark" *ngIf="notasform.invalid && (notasform.dirty || notasform.touched)">
         Completar datos obligatorios
       </div>
     <div *ngIf="!btnactualizar">
