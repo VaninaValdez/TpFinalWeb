@@ -16,15 +16,17 @@ export class ReservaComponent implements OnInit {
   esReserva = false;
   tutu = new Vehiculo();
   usuario = new Usuario();
+  btnactualizar = false;
 
   vehiculos = [];
   vehiculo: Vehiculo = new Vehiculo();
-  reserva = new Reserva(this.usuario,this.vehiculo);
+  reserva = new Reserva(this.usuario, this.vehiculo);
   reservas = [];
   constructor(public servicio: ReservaService,
             public servicioTutu: VehiculoService,
             public autenticacion: AutentifiacionService) {
     this.esReserva = false;
+    this.btnactualizar = false;
   }
 
   public traerVehiculos() {
@@ -49,11 +51,13 @@ export class ReservaComponent implements OnInit {
     );
   }
 
-  public updateReserva(reserva: any) {
-    this.servicio.update(reserva).subscribe(
+  public updateReserva() {
+    this.servicio.update(this.reserva).subscribe(
       result => {
         console.log('update correcto');
+        this.reserva = new Reserva(new Usuario(), new Vehiculo());
         this.refreshListReserva();
+        this.btnactualizar = false;
       },
       error => console.log('error: ' + error)
     );
@@ -67,7 +71,7 @@ export class ReservaComponent implements OnInit {
 
         this.reserva = new Reserva(new Usuario(), new Vehiculo());
         this.refreshListReserva();
-        this.esReserva = false;
+        this.btnactualizar = false;
         return true;
       },
       error => {
@@ -80,7 +84,7 @@ export class ReservaComponent implements OnInit {
 
   elegirReserva(tutu: any) {
     this.reserva = this.reservas.filter(x => x === tutu).pop();
-     this.esReserva = true;
+     this.btnactualizar = true;
   }
 
   elegirVehiculo(tutu: any) {

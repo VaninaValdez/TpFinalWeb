@@ -31,7 +31,7 @@
         <mfDefaultSorter by="dias">Dias</mfDefaultSorter>
       </th>
       <th style="width: 10%">
-        <mfDefaultSorter by="costoRenta">Costo</mfDefaultSorter>
+        <mfDefaultSorter by="costoRentas">Costo</mfDefaultSorter>
       </th>
       <th style="width: 10%">
         <mfDefaultSorter by="fechaRenta">Fecha de Renta</mfDefaultSorter>
@@ -51,7 +51,7 @@
       <td>{{item.estado}}</td>
       <td>
         <button class="btn-danger" (click)="eliminarReserva(item)">Borrar</button>
-        <button class="btn-dark" (click)="elegirReserva(item)">Modificar</button>
+        <button class="btn-dark" (click)="elegirReserva(item)" data-toggle="modal" data-target="#exampleModal">Modificar</button>
       </td>
     </tr>
   </tbody>
@@ -88,26 +88,49 @@
               [(ngModel)]="reserva.vehiculo.marca">
             </div>
             <div class="form-group">
-              <label for="fechaRenta">cantidad de Dias</label>
-              <input type="number" class="form-control" name="fechaRenta"
-              [(ngModel)]="reserva.dias">
+              <label for="dias">Cantidad de Dias</label>
+              <input type="number" class="form-control" name="dias"
+              [(ngModel)]="reserva.dias" #dias="ngModel" required>
+              <div *ngIf="dias.dirty || dias.touched" class="alert alert-danger">
+                  Ingrese la cantidad de dias a alquilar
+                </div>
             </div>
             <div class="form-group">
-              <label for="costoRenta">Costo de la Renta</label>
-              <input type="number" class="form-control" name="costoRenta"
-              [(ngModel)]="reserva.costoRenta">
+              <label for="fechaRenta">Fecha Renta</label>
+              <input type="date" class="form-control" name="fechaRenta"
+              [(ngModel)]="reserva.fechaRenta" #fechaRenta="ngModel" required>
+              <div *ngIf="fechaRenta.dirty || fechaRenta.touched" class="alert alert-danger">
+                  Ingrese la fecha a alquilar
+                </div>
+            </div>
+            <div class="form-group">
+              <label for="costoRentas">Costo de la Renta</label>
+              <input type="number" class="form-control" name="costoRentas"
+              [(ngModel)]="reserva.costoRentas" #costoRentas="ngModel" required>
+              <div *ngIf="costoRentas.dirty || costoRentas.touched" class="alert alert-danger">
+                  Ingrese el costo de la Renta
+            </div>
             </div>
             <div class="form-group">
               <label for="estado">Estado</label>
-              <input type="text" class="form-control" name="estado"
-              [(ngModel)]="reserva.estado">
+              <select [(ngModel)]="reserva.estado" class="form-control" placeholder="Selecione Perfil" name="estado" #estado="ngModel">
+                  <option value="pendiente">Pendiente</option>
+                  <option value="aceptado">Aceptado</option>
+                </select>
+              <!-- <input type="text" class="form-control" name="estado" [(ngModel)]="reserva.estado"> -->
             </div>
           </form>
         </div>
       </div>
       <div class="modal-footer">
+        <div class="row" *ngIf="!btnactualizar">
+          <button type="button" class="btn btn-primary" (click)="saveReserva()" data-dismiss="modal">Reservar</button>
+        </div>
+        <div class="row" *ngIf="btnactualizar">
+          <button type="button" class="btn btn-primary" (click)="updateReserva()" data-dismiss="modal">Modificar</button>
+        </div>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" (click)="saveReserva()" data-dismiss="modal">Reservar</button>
+
       </div>
     </div>
   </div>

@@ -7,7 +7,7 @@
       <div class="form-group">
         <input type="text"  [(ngModel)]="user.apellido" placeholder="Ingrese Apellido"
         name="userLastname" #userLastname="ngModel"  class="form-control" required>
-        <span *ngIf="userLastname.invalid && (userLastname.dirty || userLastname.touched)">
+        <span *ngIf="userLastname.dirty || userLastname.touched">
           <div class="alert-danger">
             campo obligatorio
           </div>
@@ -16,7 +16,7 @@
       <div class="form-group">
         <input type="text" name="userName" [(ngModel)]="user.nombre" placeholder="Ingrese Nombre" #userName="ngModel"
         class="form-control" required>
-        <span *ngIf="!userName.valid && userName.touched">
+        <span *ngIf="userName.dirty || userName.touched">
           <div class="alert-danger">
             campo obligatorio
           </div>
@@ -25,7 +25,7 @@
       <div class="form-group">
         <input type="password" name="userPass" [(ngModel)]="user.password" placeholder="Ingrese Contraseña" #userPass="ngModel"
         class="form-control" required>
-        <span *ngIf="!userPass.valid && userPass.touched">
+        <span *ngIf="userPass.dirty || userPass.touched">
           <div class="alert-danger">
             campo obligatorio
           </div>
@@ -34,7 +34,7 @@
       <div class="form-group">
         <input type="number" name="userDni" [(ngModel)]="user.dni" placeholder="Ingrese DNI" #userDni="ngModel"
         class="form-control" required>
-        <span *ngIf="!userDni.valid && userDni.touched">
+        <span *ngIf="userDni.dirty || userDni.touched">
           <div class="alert-danger">
             campo obligatorio
           </div>
@@ -43,7 +43,7 @@
       <div class="form-group">
         <input type="email" name="userEmail" [(ngModel)]="user.email" placeholder="Ingrese Email" #userEmail="ngModel"
         class="form-control" required>
-        <span *ngIf="!userEmail.valid && userEmail.touched">
+        <span *ngIf="userEmail.dirty || userEmail.touched">
           <div class="alert-danger">
             campo obligatorio
           </div>
@@ -52,7 +52,7 @@
       <div class="form-group">
         <input type="number" name="userPhone" [(ngModel)]="user.telefono" placeholder="Ingrese Telefono" #userPhone="ngModel"
         class="form-control" required>
-        <span *ngIf="!userPhone.valid && userPhone.touched">
+        <span *ngIf="userPhone.dirty || userPhone.touched">
           <div class="alert-danger">
             campo obligatorio
           </div>
@@ -61,7 +61,7 @@
       <div class="form-group">
         <input type="text" name="userUser" [(ngModel)]="user.usuario" placeholder="Ingrese Usuario" #userUser="ngModel"
         class="form-control" required>
-        <span *ngIf="!userUser.valid && userUser.touched">
+        <span *ngIf="userUser.dirty || userUser.touched">
           <div class="alert-danger">
             campo obligatorio
           </div>
@@ -73,14 +73,14 @@
           <option value="administrativo">Administrativo</option>
           <option value="cliente">Cliente</option>
         </select>
-        <span *ngIf="!userPerfil.valid && userPerfil.touched">
+        <span *ngIf="userPerfil.dirty || userPerfil.touched">
           <div class="alert-danger">
             campo obligatorio
           </div>
         </span>
       </div>
 
-      <div class="alert-dark" *ngIf="!notasform.valid && notasform.touched">
+      <div class="alert-dark" *ngIf="notasform.invalid || notasform.touched">
         Completar datos obligatorios
       </div>
     <div *ngIf="!btnactualizar">
@@ -93,7 +93,7 @@
     </form>
   </div>
 
-  <!-- Datatable, hay que revisar los by!-->
+  <!-- Datatable-->
   <table class="table table-striped" [mfData]="users" #mf="mfDataTable" [mfRowsOnPage]="4">
     <thead>
       <tr>
@@ -130,8 +130,8 @@
         <td>{{item.usuario}}</td>
         <td>{{item.perfil}}</td>
         <td>
-          <button class="btn-danger" (click)="eliminarUser(item)">Borrar</button>
-          <button class="btn-dark" (click)="elegirUser(item)">Modificar</button>
+          <button class="btn-info" (click)="eliminarUser(item)">Eliminar</button>
+          <button class="btn-danger" (click)="elegirUser(item)">Modificar</button>
         </td>
       </tr>
 

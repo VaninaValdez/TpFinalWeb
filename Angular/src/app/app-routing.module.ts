@@ -16,7 +16,7 @@ const routes: Routes = [
   {path: 'usuarios', component: AdministradorComponent},
   {path: 'reservas', component: ClienteComponent},
   {path: 'novedad', component: NovedadComponent},
-  {path: '**', pathMatch: 'full', redirectTo: 'login'}
+  {path: '**', pathMatch: 'full', redirectTo: 'home'}
 ];
  @NgModule({
   imports: [RouterModule.forRoot(routes)],
