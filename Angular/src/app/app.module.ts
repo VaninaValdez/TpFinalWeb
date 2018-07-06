@@ -19,6 +19,7 @@ import { NovedadComponent } from './components/novedad/novedad.component';
 import { VehiculoComponent } from './components/vehiculo/vehiculo.component';
 import { ReservaComponent } from './components/reserva/reserva.component';
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -40,7 +41,6 @@ import { ReservaComponent } from './components/reserva/reserva.component';
     FormsModule,
     HttpModule,
     AppRoutingModule
-
   ],
   providers: [UsuarioService],
   bootstrap: [AppComponent]
