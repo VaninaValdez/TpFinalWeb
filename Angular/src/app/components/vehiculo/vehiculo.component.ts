@@ -45,6 +45,7 @@ export class VehiculoComponent implements OnInit {
   }
 
   public saveVehiculo() {
+    console.log(this.vehiculo);
     this.servicio.save(this.vehiculo).subscribe(
       data => {
         console.log('envio ok');

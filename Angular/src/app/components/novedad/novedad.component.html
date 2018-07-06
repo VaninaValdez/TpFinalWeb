@@ -13,7 +13,7 @@
             <select [(ngModel)]="novedad.usuario" class="form-control"
                 name="usuario" #usuarioform="ngModel">
               <!-- <option *ngFor="let usuario of usuarios" [ngValue]="usuario">{{usuario.usuario}}</option> -->
-              <option [ngValue]="usuario.">{{autenticacion.userLogged.usuario}}</option>
+              <option [ngValue]="usuario">{{usuario.usuario}}</option>
             </select>
           </div>
         </div>
@@ -48,7 +48,7 @@
       <td>{{item.estado}}</td>
       <td>
         <button class="btn" (click)="eliminarNovedad(item)">Eliminar</button>
-        <button class="btn" (click)="updateNovedad()">Modificar</button>
+        <button class="btn" (click)="elegirNovedad(item)">Modificar</button>
       </td>
     </tr>
     </tbody>

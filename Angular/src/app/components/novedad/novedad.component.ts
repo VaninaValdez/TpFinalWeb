@@ -15,17 +15,22 @@ export class NovedadComponent implements OnInit {
   novedades = [];
   usuarios: Array<Usuario> = [];
   usuario = new Usuario();
+  btnactualizar = false;
+
 
 
   constructor(
     private autenticacion: AutentifiacionService,
     private servicioUser: UsuarioService,
     private servicio: NovedadService) {
+      this.btnactualizar = false;
   }
+
 
   ngOnInit() {
     this.getUsuarios();
     this.refreshListNovedad();
+    this.usuario = this.autenticacion.userLogged;
   }
 
   public refreshListNovedad() {
@@ -57,7 +62,8 @@ export class NovedadComponent implements OnInit {
       data => {
         console.log('envio ok');
         console.log('agregado correctamente.');
-        this.novedad = new Novedad();
+        this.novedad = new Novedad(this.usuario);
+        this.btnactualizar = false;
         this.refreshListNovedad();
         return true;
       },
@@ -74,8 +80,9 @@ export class NovedadComponent implements OnInit {
     this.servicio.update(this.novedad).subscribe(
       result => {
         console.log('update correcto');
-        this.novedad = new Novedad();
+        this.novedad = new Novedad(this.usuario);
         this.refreshListNovedad();
+        this.btnactualizar = false;
       },
       error => console.log('error: ' + error)
     );
@@ -89,5 +96,9 @@ export class NovedadComponent implements OnInit {
       },
       error => console.log('error: ' + error)
     );
+  }
+  elegirNovedad(nove: any) {
+    this.novedad = this.novedades.filter(x => x === nove).pop();
+     this.btnactualizar = true;
   }
 }
