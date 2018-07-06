@@ -27,7 +27,11 @@
           </select>
         </div>
         <div class="col-5 col-sm-4 ml-auto mt-2">
-          <button class="btn btn-block btn-primary" (click)="saveNovedad()">Enviar</button>
+            <div *ngIf="!btnactualizar"><button class="btn btn-block btn-primary" (click)="saveNovedad()">Enviar</button>
+            </div>
+            <div *ngIf="btnactualizar"><button class="btn btn-block btn-primary" (click)="updateNovedad()">Modificar</button>
+            </div>
+
         </div>
     </div>
 
