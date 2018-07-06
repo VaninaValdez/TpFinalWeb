@@ -105,11 +105,17 @@ class NovedadController extends Controller
     {
         $data = json_decode($request->getContent(), true);
         $request->request->replace($data);
-
+        
         $em = $this->getDoctrine()->getManager();
         $novedad = $em->getRepository('EmpresaBundle:Novedad')->find($id);
+        
+        
+        $usuarioArray= $request->request->get('usuario');
+        $idusuario = $usuarioArray['id'];
+        $em = $this->getDoctrine()->getManager();
+        $usuario = $em->getRepository("EmpresaBundle:Usuario")->find($idusuario);
+        $novedad->setUsuario($usuario);
 
-        $novedad->setUsuario($request->request->get('usuario'));
         $novedad->setTexto($request->request->get('texto'));
         $novedad->setEstado($request->request->get('estado'));
         
@@ -121,6 +127,8 @@ class NovedadController extends Controller
         $result['status'] = 'ok';
         return new Response(json_encode($result), 200);
     }
+
+    
 
     /**
      * Deletes a novedad entity.

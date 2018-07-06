@@ -14,14 +14,13 @@ export class NovedadComponent implements OnInit {
   novedad: Novedad = new Novedad();
   novedades = [];
   usuarios: Array<Usuario> = [];
-  btnactualizar = false;
+  usuario = new Usuario();
 
 
   constructor(
     private autenticacion: AutentifiacionService,
     private servicioUser: UsuarioService,
-    private servicio:NovedadService) {
-    this.btnactualizar = false
+    private servicio: NovedadService) {
   }
 
   ngOnInit() {
@@ -44,12 +43,14 @@ export class NovedadComponent implements OnInit {
     this.servicioUser.getAll().subscribe(
       result => {
         this.usuarios = JSON.parse(result.usuarios);
+
       },
       error => {
         console.log(error);
       }
     );
   }
+
 
   public saveNovedad() {
     this.servicio.save(this.novedad).subscribe(
@@ -68,11 +69,11 @@ export class NovedadComponent implements OnInit {
     );
   }
 
+
   public updateNovedad() {
     this.servicio.update(this.novedad).subscribe(
       result => {
         console.log('update correcto');
-        this.btnactualizar = false;
         this.novedad = new Novedad();
         this.refreshListNovedad();
       },
@@ -80,7 +81,13 @@ export class NovedadComponent implements OnInit {
     );
   }
 
-  eliminarNovedad(nove: any){
-    console.log('novedad eliminada');
+  eliminarNovedad(novedad: any) {
+    this.servicio.delete(novedad).subscribe(
+      result => {
+        console.log('envio delete');
+        this.refreshListNovedad();
+      },
+      error => console.log('error: ' + error)
+    );
   }
 }
