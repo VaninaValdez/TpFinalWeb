@@ -68,7 +68,7 @@ export class NovedadComponent implements OnInit {
     );
   }
 
-  public updateUser() {
+  public updateNovedad() {
     this.servicio.update(this.novedad).subscribe(
       result => {
         console.log('update correcto');
