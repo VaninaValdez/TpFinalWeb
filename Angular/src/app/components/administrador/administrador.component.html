@@ -6,7 +6,7 @@
       <div class="form-group">
         <input type="text"  [(ngModel)]="user.apellido" placeholder="Ingrese Apellido"
         name="userLastname" #userLastname="ngModel"  class="form-control" required>
-        <span *ngIf="userLastname.dirty || userLastname.touched">
+        <span *ngIf="userLastname.invalid && (userLastname.dirty || userLastname.touched)">
           <div class="alert-danger">
             campo obligatorio
           </div>
@@ -15,7 +15,7 @@
       <div class="form-group">
         <input type="text" name="userName" [(ngModel)]="user.nombre" placeholder="Ingrese Nombre" #userName="ngModel"
         class="form-control" required>
-        <span *ngIf="userName.dirty || userName.touched">
+        <span *ngIf="userName.invalid && (userName.dirty || userName.touched)">
           <div class="alert-danger">
             campo obligatorio
           </div>
@@ -24,7 +24,7 @@
       <div class="form-group">
         <input type="password" name="userPass" [(ngModel)]="user.password" placeholder="Ingrese Contraseña" #userPass="ngModel"
         class="form-control" required>
-        <span *ngIf="userPass.dirty || userPass.touched">
+        <span *ngIf="userPass.invalid && (userPass.dirty || userPass.touched)">
           <div class="alert-danger">
             campo obligatorio
           </div>
@@ -33,7 +33,7 @@
       <div class="form-group">
         <input type="number" name="userDni" [(ngModel)]="user.dni" placeholder="Ingrese DNI" #userDni="ngModel"
         class="form-control" required>
-        <span *ngIf="userDni.dirty || userDni.touched">
+        <span *ngIf="userDni.invalid && (userDni.dirty || userDni.touched)">
           <div class="alert-danger">
             campo obligatorio
           </div>
@@ -42,7 +42,7 @@
       <div class="form-group">
         <input type="email" name="userEmail" [(ngModel)]="user.email" placeholder="Ingrese Email" #userEmail="ngModel"
         class="form-control" required>
-        <span *ngIf="userEmail.dirty || userEmail.touched">
+        <span *ngIf="userEmail.invalid && (userEmail.dirty || userEmail.touched)">
           <div class="alert-danger">
             campo obligatorio
           </div>
@@ -51,7 +51,7 @@
       <div class="form-group">
         <input type="number" name="userPhone" [(ngModel)]="user.telefono" placeholder="Ingrese Telefono" #userPhone="ngModel"
         class="form-control" required>
-        <span *ngIf="userPhone.dirty || userPhone.touched">
+        <span *ngIf="userPhone.invalid && (userPhone.dirty || userPhone.touched)">
           <div class="alert-danger">
             campo obligatorio
           </div>
@@ -60,7 +60,7 @@
       <div class="form-group">
         <input type="text" name="userUser" [(ngModel)]="user.usuario" placeholder="Ingrese Usuario" #userUser="ngModel"
         class="form-control" required>
-        <span *ngIf="userUser.dirty || userUser.touched">
+        <span *ngIf="userUser.invalid && (marca.dirty || marca.touched)">
           <div class="alert-danger">
             campo obligatorio
           </div>
@@ -72,14 +72,14 @@
           <option value="administrativo">Administrativo</option>
           <option value="cliente">Cliente</option>
         </select>
-        <span *ngIf="userPerfil.dirty || userPerfil.touched">
+        <span *ngIf="userPerfil.invalid && (userPerfil.dirty || userPerfil.touched)">
           <div class="alert-danger">
             campo obligatorio
           </div>
         </span>
       </div>
 
-      <div class="alert-dark" *ngIf="notasform.invalid || notasform.touched">
+      <div class="alert-dark" *ngIf="notasform.invalid && (notasForm.dirty || notasform.touched)">
         Completar datos obligatorios
       </div>
     <div *ngIf="!btnactualizar">

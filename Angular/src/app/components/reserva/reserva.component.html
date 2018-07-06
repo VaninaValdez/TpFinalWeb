@@ -88,7 +88,7 @@
               <label for="dias">Cantidad de Dias</label>
               <input type="number" class="form-control" name="dias"
               [(ngModel)]="reserva.dias" #dias="ngModel" required>
-              <div *ngIf="dias.dirty || dias.touched" class="alert alert-danger">
+              <div *ngIf="dias.invalid && (dias.dirty || dias.touched)" class="alert alert-danger">
                   Ingrese la cantidad de dias a alquilar
                 </div>
             </div>
@@ -96,7 +96,7 @@
               <label for="fechaRenta">Fecha Renta</label>
               <input type="date" class="form-control" name="fechaRenta"
               [(ngModel)]="reserva.fechaRenta" #fechaRenta="ngModel" required>
-              <div *ngIf="fechaRenta.dirty || fechaRenta.touched" class="alert alert-danger">
+              <div *ngIf="fechaRenta.invalid && (fechaRenta.dirty || fechaRenta.touched)" class="alert alert-danger">
                   Ingrese la fecha a alquilar
                 </div>
             </div>
@@ -104,7 +104,7 @@
               <label for="costoRentas">Costo de la Renta</label>
               <input type="number" class="form-control" name="costoRentas"
               [(ngModel)]="reserva.costoRentas" #costoRentas="ngModel" required>
-              <div *ngIf="costoRentas.dirty || costoRentas.touched" class="alert alert-danger">
+              <div *ngIf="costoRentas.invalid && (costoRentas.dirty || costoRentas.touched)" class="alert alert-danger">
                   Ingrese el costo de la Renta
             </div>
             </div>

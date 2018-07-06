@@ -7,7 +7,7 @@
       <div class="col-10 mb-2">
         <input class="form-control" name="patente" type="text" placeholder="PLZ 007"
                [(ngModel)]="vehiculo.patente" #patente="ngModel" required/>
-        <div *ngIf="patente.dirty || patente.touched" class="alert alert-danger">
+        <div *ngIf="patente.invalid && (patente.dirty || patente.touched)" class="alert alert-danger">
           Ingrese la patente del vehiculo
         </div>
       </div>
@@ -15,7 +15,7 @@
       <div class="col-10 mb-2">
         <input class="form-control" name="marca" type="text" placeholder="ej: Ford"
                [(ngModel)]="vehiculo.marca" #marca="ngModel" required/>
-        <div *ngIf="marca.dirty || marca.touched" class="alert alert-danger">
+        <div *ngIf="marca.invalid && (marca.dirty || marca.touched)" class="alert alert-danger">
           Ingrese la marca del vehiculo
         </div>
       </div>
@@ -24,15 +24,15 @@
       <div class="col-10 mb-2">
         <input class="form-control" name="modelo" type="text" placeholder="ej: Falcon"
                [(ngModel)]="vehiculo.modelo" #modelo="ngModel" required/>
-        <div *ngIf="modelo.dirty || modelo.touched" class="alert alert-danger">
+        <div *ngIf="modelo.invalid && (modelo.dirty || modelo.touched) " class="alert alert-danger">
           Ingrese el modelo del vehiculo
         </div>
       </div>
       <div class="col">Path Imagen</div>
       <div class="col-10 mb-2">
-        <input class="form-control" name="imagen" type="text" placeholder="ej: Falcon"
+        <input class="form-control" name="imagen" type="text" placeholder="ej: falcon.jpg"
                [(ngModel)]="vehiculo.pathimagen" #imagen="ngModel" required/>
-        <div *ngIf="imagen.dirty || imagen.touched" class="alert alert-danger">
+        <div *ngIf="imagen.invalid && (imagen.dirty || imagen.touched)" class="alert alert-danger">
           Ingrese la ruta de imagen
         </div>
       </div>
