@@ -1,67 +1,76 @@
 <div class="container">
   <div class="row">
-    <div class="col mb-3"><h3 class="titulo">Novedades</h3></div>
-      <div class="w-100"></div>
-        <div class="col-8 mr-auto">
-          <span class="bg-primary form-control">Envia tu mensaje</span>
-        </div>
-        <div class="w-100"></div>
-        <div class="form-inline mt-2">
-          <div class="col-3 col-sm-3">Usuario</div>
-          <div class="col-9 col-sm-9">
-            <!-- <input class="form-control" placeholder="Ingrese usuario" name="novedadUsuario" [(ngModel)]="novedad.usuario" #novedadUsuario="ngModel"> -->
-            <select [(ngModel)]="novedad.usuario" class="form-control"
-                name="usuario" #usuarioform="ngModel">
-              <!-- <option *ngFor="let usuario of usuarios" [ngValue]="usuario">{{usuario.usuario}}</option> -->
-              <option [ngValue]="usuario">{{usuario.usuario}}</option>
-            </select>
-          </div>
-        </div>
-        <div class="col-sm-12">
-          <textarea class="form-control" name="novedadTexto" [(ngModel)]="novedad.texto" #novedadTexto="ngModel"></textarea>
-        </div>
-        <div class="form-group col-3 col-sm-3">
-          <select class="form-control" #novedadEstado="ngModel" name="novedadEstado" [(ngModel)]="novedad.estado">
-            <option value="pendiente">Pendiente</option>
-            <option value="procesado">Procesado</option>
+    <div class="col mb-3">
+      <h3 class="titulo">Novedades</h3>
+    </div>
+    <div class="w-100"></div>
+    <form (ngSubmit)="onSubmit()" #novedadForm="ngForm">
+      <div></div>
+      <div>
+        <div>Usuario</div>
+        <div>
+          <!-- <input class="form-control" placeholder="Ingrese usuario" name="novedadUsuario" [(ngModel)]="novedad.usuario" #novedadUsuario="ngModel"> -->
+          <select [(ngModel)]="novedad.usuario" class="form-control" name="usuario" #usuarioform="ngModel" required>
+            <!-- <option *ngFor="let usuario of usuarios" [ngValue]="usuario">{{usuario.usuario}}</option> -->
+            <option [ngValue]="usuario">{{usuario.usuario}}</option>
           </select>
         </div>
-        <div class="col-5 col-sm-4 ml-auto mt-2">
-            <div *ngIf="!btnactualizar"><button class="btn btn-block btn-primary" (click)="saveNovedad()">Enviar</button>
-            </div>
-            <div *ngIf="btnactualizar"><button class="btn btn-block btn-primary" (click)="updateNovedad()">Modificar</button>
-            </div>
-
+      </div>
+      <div>
+        <textarea class="form-control" name="novedadTexto" [(ngModel)]="novedad.texto" #novedadTexto="ngModel" required></textarea>
+      </div>
+      <div>
+        <select class="form-control" #novedadEstado="ngModel" name="novedadEstado" [(ngModel)]="novedad.estado" required>
+          <option value="pendiente">Pendiente</option>
+          <option value="procesado">Procesado</option>
+        </select>
+      </div>
+      <div>
+        <div *ngIf="!btnactualizar">
+          <button class="btn btn-block btn-primary" [disabled]="!novedadForm.form.valid" (click)="saveNovedad()">Enviar</button>
         </div>
-    </div>
+        <div *ngIf="btnactualizar">
+          <button class="btn btn-block btn-primary" [disabled]="!novedadForm.form.valid" (click)="updateNovedad()">Modificar</button>
+        </div>
+
+      </div>
+    </form>
+
+  </div>
 
 
   <!-- Datatable -->
   <table class="table table-striped" [mfData]="novedades" #mf="mfDataTable" [mfRowsOnPage]="4">
     <thead>
-    <tr>
-      <th style="width: 20%"> <mfDefaultSorter by="desde">Usuario</mfDefaultSorter> </th>
-      <th style="width: 70%"> <mfDefaultSorter by="texto">Texto</mfDefaultSorter> </th>
-      <th style="width: 10%"> <mfDefaultSorter by="texto">Estado</mfDefaultSorter> </th>
-    </tr>
+      <tr>
+        <th style="width: 20%">
+          <mfDefaultSorter by="desde">Usuario</mfDefaultSorter>
+        </th>
+        <th style="width: 70%">
+          <mfDefaultSorter by="texto">Texto</mfDefaultSorter>
+        </th>
+        <th style="width: 10%">
+          <mfDefaultSorter by="texto">Estado</mfDefaultSorter>
+        </th>
+      </tr>
     </thead>
     <tbody>
-    <tr *ngFor="let item of mf.data">
-      <td>{{item.usuario.usuario}}</td>
-      <td>{{item.texto}}</td>
-      <td>{{item.estado}}</td>
-      <td>
-        <button class="btn" (click)="eliminarNovedad(item)">Eliminar</button>
-        <button class="btn" (click)="elegirNovedad(item)">Modificar</button>
-      </td>
-    </tr>
+      <tr *ngFor="let item of mf.data">
+        <td>{{item.usuario.usuario}}</td>
+        <td>{{item.texto}}</td>
+        <td>{{item.estado}}</td>
+        <td>
+          <button class="btn" (click)="eliminarNovedad(item)">Eliminar</button>
+          <button class="btn" (click)="elegirNovedad(item)">Modificar</button>
+        </td>
+      </tr>
     </tbody>
     <tfoot>
-    <tr>
-      <td colspan="4">
-        <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25]"></mfBootstrapPaginator>
-      </td>
-    </tr>
+      <tr>
+        <td colspan="4">
+          <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25]"></mfBootstrapPaginator>
+        </td>
+      </tr>
     </tfoot>
   </table>
 

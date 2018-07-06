@@ -16,14 +16,14 @@ export class NovedadComponent implements OnInit {
   usuarios: Array<Usuario> = [];
   usuario = new Usuario();
   btnactualizar = false;
-
+  submitted = false;
 
 
   constructor(
     private autenticacion: AutentifiacionService,
     private servicioUser: UsuarioService,
     private servicio: NovedadService) {
-      this.btnactualizar = false;
+    this.btnactualizar = false;
   }
 
 
@@ -36,13 +36,23 @@ export class NovedadComponent implements OnInit {
   public refreshListNovedad() {
     this.servicio.getAll().subscribe(
       result => {
-        this.novedades = JSON.parse(result.novedades);
+        const temp: Array<Novedad> = JSON.parse(result.novedades);
+        if (this.autenticacion.userLogged.perfil !== 'administrador') {
+          this.novedades = temp.filter(u => u.usuario.id === this.autenticacion.userLogged.id);
+        } else {
+          this.novedades = temp;
+        }
       },
       error => {
         console.log(error);
       }
     );
   }
+
+  onSubmit() {
+    this.submitted = true;
+  }
+
 
   public getUsuarios() {
     this.servicioUser.getAll().subscribe(
@@ -99,6 +109,6 @@ export class NovedadComponent implements OnInit {
   }
   elegirNovedad(nove: any) {
     this.novedad = this.novedades.filter(x => x === nove).pop();
-     this.btnactualizar = true;
+    this.btnactualizar = true;
   }
 }
